@@ -30,11 +30,10 @@ import java.util.List;
 public class AppScanner extends Activity{
 
     private final static String SCAN="SCANNER";
-    private ListView listView;
+    //private ListView listView;
     private ArrayList appList;
 
-    ////
-    //SwipeMenuListView listView;
+    SwipeMenuListView listView;
 
     private void scanAll() {
         PackageManager pm=this.getPackageManager();
@@ -67,41 +66,41 @@ public class AppScanner extends Activity{
     }
 
     ///////////////
-//    private SwipeMenuCreator creator = new SwipeMenuCreator() {
-//
-//        @Override
-//        public void create(SwipeMenu menu) {
-//            // create "open" item
-//            SwipeMenuItem openItem = new SwipeMenuItem(
-//                    getApplicationContext());
-//            // set item background
-//            openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-//                    0xCE)));
-//            // set item width
-//            openItem.setWidth(90);
-//            // set item title
-//            openItem.setTitle("Open");
-//            // set item title fontsize
-//            openItem.setTitleSize(18);
-//            // set item title font color
-//            openItem.setTitleColor(Color.WHITE);
-//            // add to menu
-//            menu.addMenuItem(openItem);
-//
-//            // create "delete" item
-//            SwipeMenuItem deleteItem = new SwipeMenuItem(
-//                    getApplicationContext());
-//            // set item background
-//            deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
-//                    0x3F, 0x25)));
-//            // set item width
-//            deleteItem.setWidth(90);
-//            openItem.setTitleSize(18);
-//            openItem.setTitle("More");
-//            // add to menu
-//            menu.addMenuItem(deleteItem);
-//        }
-//    };
+    private SwipeMenuCreator creator = new SwipeMenuCreator() {
+
+        @Override
+        public void create(SwipeMenu menu) {
+            // create "open" item
+            SwipeMenuItem openItem = new SwipeMenuItem(
+                    getApplicationContext());
+            // set item background
+            openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
+                    0xCE)));
+            // set item width
+            openItem.setWidth(90);
+            // set item title
+            openItem.setTitle("Open");
+            // set item title fontsize
+            openItem.setTitleSize(18);
+            // set item title font color
+            openItem.setTitleColor(Color.WHITE);
+            // add to menu
+            menu.addMenuItem(openItem);
+
+            // create "delete" item
+            SwipeMenuItem deleteItem = new SwipeMenuItem(
+                    getApplicationContext());
+            // set item background
+            deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                    0x3F, 0x25)));
+            // set item width
+            deleteItem.setWidth(90);
+            openItem.setTitleSize(18);
+            openItem.setTitle("More");
+            // add to menu
+            menu.addMenuItem(deleteItem);
+        }
+    };
 
 
     @Override
@@ -111,29 +110,29 @@ public class AppScanner extends Activity{
         setContentView(R.layout.app_list);
         //scanAll();
 
-        listView=(ListView)findViewById(R.id.mylist);
+        listView=(SwipeMenuListView)findViewById(R.id.mylist);
         // listView.setAdapter(new ItemAdapter(AppScanner.this,android.R.layout.activity_list_item, scanAll() ) );
         scanAll();
-        listView.setAdapter(new TinyAdapter(this) );
+        listView.setAdapter(new TinyAdapter(this));
 
         ////////////
-//        listView.setMenuCreator(creator);
-//
-//        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-//                switch (index) {
-//                    case 0:
-//                        // open
-//                        break;
-//                    case 1:
-//                        // delete
-//                        break;
-//                }
-//                // false : close the menu; true : not close the menu
-//                return false;
-//            }
-//        });
+        listView.setMenuCreator(creator);
+
+        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch (index) {
+                    case 0:
+                        // open
+                        break;
+                    case 1:
+                        // delete
+                        break;
+                }
+                // false : close the menu; true : not close the menu
+                return false;
+            }
+        });
 
     }
 

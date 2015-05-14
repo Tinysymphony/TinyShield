@@ -14,6 +14,7 @@ public class MainBoard extends Activity {
      */
     private Button turnButton;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

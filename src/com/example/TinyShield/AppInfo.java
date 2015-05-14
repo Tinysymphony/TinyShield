@@ -15,6 +15,10 @@ public class AppInfo {
     private int[] rights = new int[20];
     private PermissionInfo[] permissionInfos;
 
+    private double riskCoefficient;
+
+    public void setRiskCoefficient(double coe) { riskCoefficient=coe; }
+
     public void setAppName(String name){
         appName=name;
     }
@@ -42,6 +46,8 @@ public class AppInfo {
     public void setPermissionInfos(PermissionInfo[] getPermissions){
         permissionInfos=getPermissions;
     }
+
+    public String getRiskCoefficient() { return Double.toString(riskCoefficient); }
 
     public String getAppName(){ return this.appName; }
 

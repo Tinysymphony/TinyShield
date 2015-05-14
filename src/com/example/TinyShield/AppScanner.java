@@ -32,7 +32,7 @@ public class AppScanner extends Activity{
     private final static String SCAN="SCANNER";
     //private ListView listView;
     private ArrayList appList;
-
+    private CoefficientCal coefficientCal;
     SwipeMenuListView listView;
 
     private void scanAll() {
@@ -42,7 +42,6 @@ public class AppScanner extends Activity{
 
         for(int i=0;i<packages.size();i++){
             PackageInfo packageInfo=packages.get(i);
-
 
             //ignore system application
             if((packageInfo.applicationInfo.flags& ApplicationInfo.FLAG_SYSTEM)!=0)
@@ -58,7 +57,7 @@ public class AppScanner extends Activity{
             tmpAppInfo.setAppPackageName(packageInfo.packageName);
             tmpAppInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(pm));
             tmpAppInfo.setPermissionInfos(packageInfo.permissions);
-
+            tmpAppInfo.setRiskCoefficient(coefficientCal.cal(packageInfo.permissions));
             appList.add(tmpAppInfo);
 
         }
@@ -108,7 +107,6 @@ public class AppScanner extends Activity{
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.app_list);
-        //scanAll();
 
         listView=(SwipeMenuListView)findViewById(R.id.mylist);
         // listView.setAdapter(new ItemAdapter(AppScanner.this,android.R.layout.activity_list_item, scanAll() ) );
@@ -168,13 +166,16 @@ public class AppScanner extends Activity{
                 itemHolder.icon=(ImageView)convertView.findViewById(R.id.app);
                 itemHolder.name=(TextView)convertView.findViewById(R.id.appName);
                 itemHolder.pname=(TextView)convertView.findViewById(R.id.packageName);
+                itemHolder.coefficient=(TextView)convertView.findViewById(R.id.coefficient);
                 convertView.setTag(itemHolder);
             } else{
                 itemHolder=(ViewHolder)convertView.getTag();
             }
+
             itemHolder.name.setText(appInfo.getAppName());
             itemHolder.pname.setText(appInfo.getAppPackageName());
             itemHolder.icon.setImageDrawable(appInfo.getAppIcon());
+            itemHolder.coefficient.setText(appInfo.getRiskCoefficient());
             return convertView;
         }
     }
@@ -182,6 +183,7 @@ public class AppScanner extends Activity{
     class ViewHolder{
         TextView name=null;
         TextView pname=null;
+        TextView coefficient=null;
         ImageView icon=null;
     }
 

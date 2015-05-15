@@ -32,12 +32,13 @@ public class AppScanner extends Activity{
     private final static String SCAN="SCANNER";
     //private ListView listView;
     private ArrayList appList;
-    private CoefficientCal coefficientCal;
+    private CoefficientCal coefficientCal = new CoefficientCal();
     SwipeMenuListView listView;
+    PackageManager pm;
 
     private void scanAll() {
-        PackageManager pm=this.getPackageManager();
         appList = new ArrayList<AppInfo>();
+        pm=this.getPackageManager();
         List<PackageInfo> packages= pm.getInstalledPackages(0);
 
         for(int i=0;i<packages.size();i++){
@@ -49,40 +50,51 @@ public class AppScanner extends Activity{
 
             Log.d(SCAN, packageInfo.packageName);
 
-
             AppInfo tmpAppInfo= new AppInfo();
             tmpAppInfo.setAppName(packageInfo.applicationInfo.loadLabel(pm).toString());
             tmpAppInfo.setAppVersion(packageInfo.versionName);
             tmpAppInfo.setVersionCode(packageInfo.versionCode);
             tmpAppInfo.setAppPackageName(packageInfo.packageName);
+            tmpAppInfo.setRisks(permissionCheck(packageInfo.packageName));
             tmpAppInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(pm));
-            tmpAppInfo.setPermissionInfos(packageInfo.permissions);
-            tmpAppInfo.setRiskCoefficient(coefficientCal.cal(packageInfo.permissions));
+            tmpAppInfo.setRiskCoefficient();
+
             appList.add(tmpAppInfo);
 
         }
-        //return appList;
     }
 
-    ///////////////
     private SwipeMenuCreator creator = new SwipeMenuCreator() {
 
         @Override
         public void create(SwipeMenu menu) {
+
+            //create "more" item
+            SwipeMenuItem moreItem = new SwipeMenuItem(
+                    getApplicationContext());
+            // set item background
+            moreItem.setBackground(new ColorDrawable(Color.rgb(105, 176, 172))); //青磁
+            // set item width
+            moreItem.setWidth(90);
+            moreItem.setTitleSize(18);
+            moreItem.setTitle("分析");
+            moreItem.setTitleColor(Color.WHITE);
+            // add to menu
+            menu.addMenuItem(moreItem);
+
             // create "open" item
             SwipeMenuItem openItem = new SwipeMenuItem(
                     getApplicationContext());
             // set item background
-            openItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,
-                    0xCE)));
+            openItem.setBackground(new ColorDrawable(Color.rgb(0, 170, 144))); //青绿
             // set item width
             openItem.setWidth(90);
             // set item title
-            openItem.setTitle("Open");
+            openItem.setTitle("打开");
+            openItem.setTitleColor(Color.WHITE);
             // set item title fontsize
             openItem.setTitleSize(18);
             // set item title font color
-            openItem.setTitleColor(Color.WHITE);
             // add to menu
             menu.addMenuItem(openItem);
 
@@ -90,12 +102,12 @@ public class AppScanner extends Activity{
             SwipeMenuItem deleteItem = new SwipeMenuItem(
                     getApplicationContext());
             // set item background
-            deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
-                    0x3F, 0x25)));
+            deleteItem.setBackground(new ColorDrawable(Color.rgb(38, 135, 133))); //青碧
             // set item width
             deleteItem.setWidth(90);
-            openItem.setTitleSize(18);
-            openItem.setTitle("More");
+            deleteItem.setTitleSize(18);
+            deleteItem.setTitle("卸载");
+            deleteItem.setTitleColor(Color.WHITE);
             // add to menu
             menu.addMenuItem(deleteItem);
         }
@@ -109,11 +121,11 @@ public class AppScanner extends Activity{
         setContentView(R.layout.app_list);
 
         listView=(SwipeMenuListView)findViewById(R.id.mylist);
-        // listView.setAdapter(new ItemAdapter(AppScanner.this,android.R.layout.activity_list_item, scanAll() ) );
+
         scanAll();
+
         listView.setAdapter(new TinyAdapter(this));
 
-        ////////////
         listView.setMenuCreator(creator);
 
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
@@ -121,10 +133,13 @@ public class AppScanner extends Activity{
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        // open
+
                         break;
                     case 1:
-                        // delete
+
+                        break;
+                    case 2:
+
                         break;
                 }
                 // false : close the menu; true : not close the menu
@@ -186,6 +201,37 @@ public class AppScanner extends Activity{
         TextView coefficient=null;
         ImageView icon=null;
     }
+
+    private boolean[] permissionCheck(String packageName){
+        boolean []risk;
+        risk = new boolean[4];
+        risk[0] = isInternet(packageName);
+        risk[1] = isReadSMS(packageName) && isSendSMS(packageName);
+        risk[2] = isWriteSMS(packageName) && isSendSMS(packageName);
+        risk[3] = isInstallPackage(packageName);
+        return risk;
+    }
+
+    private boolean isInternet(String packageName){
+        return PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.INTERNET", packageName);
+    }
+
+    private boolean isReadSMS(String packageName){
+        return PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.READ_SMS", packageName);
+    }
+
+    private boolean isSendSMS(String packageName){
+        return PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.SEND_SMS", packageName);
+    }
+
+    private boolean isWriteSMS(String packageName){
+        return PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.WRITE_SMS", packageName);
+    }
+
+    private boolean isInstallPackage(String packageName){
+        return PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.INSTALL_PACKAGES", packageName);
+    }
+
 
 
 }

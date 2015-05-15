@@ -1,7 +1,10 @@
 package com.example.TinyShield;
 
-import android.content.pm.PermissionInfo;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tiny on 3/6/15.
@@ -13,11 +16,32 @@ public class AppInfo {
     private int versionCode;
     private Drawable appIcon=null;
     private int[] rights = new int[20];
-    private PermissionInfo[] permissionInfos;
+    private List<String>permissionList = new ArrayList<String>();
 
-    private double riskCoefficient;
+    private char[] riskCoefficient = new char[4];
+    private boolean[] risks = new boolean[4];
 
-    public void setRiskCoefficient(double coe) { riskCoefficient=coe; }
+    public AppInfo(){
+        for(boolean item : risks)
+            item = false;
+        for(char item : riskCoefficient)
+            item = '1';
+
+    }
+
+    public void setRisks(boolean[] inputRisks){
+        risks = inputRisks;
+    }
+
+    public void setRiskCoefficient(){
+        for(int i=0; i<4; i++){
+            if(risks!=null)
+                if(risks[i] != false)
+                    riskCoefficient[i] = '1';
+                else
+                    riskCoefficient[i] = '0';
+        }
+    }
 
     public void setAppName(String name){
         appName=name;
@@ -43,16 +67,16 @@ public class AppInfo {
         rights=getRights;
     }
 
-    public void setPermissionInfos(PermissionInfo[] getPermissions){
-        permissionInfos=getPermissions;
-    }
-
-    public String getRiskCoefficient() { return Double.toString(riskCoefficient); }
+    public String getRiskCoefficient() { return String.valueOf(riskCoefficient); }
 
     public String getAppName(){ return this.appName; }
 
     public String getAppPackageName(){ return this.appPackageName; }
 
     public Drawable getAppIcon(){ return this.appIcon; }
+
+    public String[] getPermissionList() { return (String[])permissionList.toArray(); }
+
+
 }
 

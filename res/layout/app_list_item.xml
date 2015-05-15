@@ -31,5 +31,4 @@
                   android:layout_alignTop="@+id/risk" android:layout_toRightOf="@+id/risk"
             />
     </RelativeLayout>
-
 </LinearLayout>

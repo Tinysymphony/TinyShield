@@ -47,9 +47,13 @@ public class NetworkFlow extends Activity {
                     if(NET.equals(permission)){
                         int userId = info.applicationInfo.uid;
                         AppNetwork app = new AppNetwork();
+                        long rx = TrafficStats.getUidRxBytes(userId);
+                        long tx = TrafficStats.getUidTxBytes(userId);
+                        if( rx < 0 || tx < 0)
+                            continue;
                         app.name = info.applicationInfo.loadLabel(pm).toString();
-                        app.receivedMessage = TrafficStats.getUidRxBytes(userId);
-                        app.sentMessage = TrafficStats.getUidTxBytes(userId);
+                        app.receivedMessage = rx;
+                        app.sentMessage = tx;
                         appList.add(app);
                     }
             }

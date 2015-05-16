@@ -12,21 +12,30 @@ public class MainBoard extends Activity {
     /**
      * Called when the activity is first created.
      */
-    private Button turnButton;
-
+    private Button appScanButton;
+    private Button networkFlowButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
-        turnButton=(Button)findViewById(R.id.turnToApp);
-        turnButton.setOnClickListener(new View.OnClickListener() {
+
+        appScanButton = (Button)findViewById(R.id.turnToApp);
+        appScanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Intent intent=new Intent(MainBoard.this,AppScanner.class);
-               startActivity(intent);
-                //finish();
+                Intent intent = new Intent(MainBoard.this, AppScanner.class);
+                startActivity(intent);
+            }
+        });
+
+        networkFlowButton = (Button)findViewById(R.id.turnToNetwork);
+        networkFlowButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+        public  void onClick(View v){
+                Intent intent = new Intent(MainBoard.this, NetworkFlow.class);
+                startActivity(intent);
             }
         });
 

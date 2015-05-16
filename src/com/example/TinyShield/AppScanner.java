@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.preference.DialogPreference;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,11 +33,10 @@ import java.util.List;
 //get basic information of all applications on the system
 public class AppScanner extends Activity{
 
-    private final static String SCAN="SCANNER";
+    private final static String ACT ="Scanner";
     //private ListView listView;
     private ArrayList appList;
-    private CoefficientCal coefficientCal = new CoefficientCal();
-    SwipeMenuListView listView;
+    private SwipeMenuListView listView;
     PackageManager pm;
 
     private void scanAll() {
@@ -53,10 +51,6 @@ public class AppScanner extends Activity{
             if((packageInfo.applicationInfo.flags& ApplicationInfo.FLAG_SYSTEM)!=0)
                 continue;
 
-            Log.d(SCAN, packageInfo.packageName);
-
-
-
             AppInfo tmpAppInfo= new AppInfo();
             tmpAppInfo.setAppName(packageInfo.applicationInfo.loadLabel(pm).toString());
             tmpAppInfo.setAppVersion(packageInfo.versionName);
@@ -68,6 +62,7 @@ public class AppScanner extends Activity{
             appList.add(tmpAppInfo);
 
         }
+        Log.d(ACT, "Finish scanning.");
     }
 
     private SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -78,43 +73,31 @@ public class AppScanner extends Activity{
             //create "more" item
             SwipeMenuItem moreItem = new SwipeMenuItem(
                     getApplicationContext());
-            // set item background
             moreItem.setBackground(new ColorDrawable(Color.rgb(105, 176, 172))); //青磁
-            // set item width
             moreItem.setWidth(90);
             moreItem.setTitleSize(18);
             moreItem.setTitle("分析");
             moreItem.setTitleColor(Color.WHITE);
-            // add to menu
             menu.addMenuItem(moreItem);
 
             // create "open" item
             SwipeMenuItem openItem = new SwipeMenuItem(
                     getApplicationContext());
-            // set item background
             openItem.setBackground(new ColorDrawable(Color.rgb(0, 170, 144))); //青绿
-            // set item width
             openItem.setWidth(90);
-            // set item title
             openItem.setTitle("打开");
             openItem.setTitleColor(Color.WHITE);
-            // set item title fontsize
             openItem.setTitleSize(18);
-            // set item title font color
-            // add to menu
             menu.addMenuItem(openItem);
 
             // create "delete" item
             SwipeMenuItem deleteItem = new SwipeMenuItem(
                     getApplicationContext());
-            // set item background
             deleteItem.setBackground(new ColorDrawable(Color.rgb(38, 135, 133))); //青碧
-            // set item width
             deleteItem.setWidth(90);
             deleteItem.setTitleSize(18);
             deleteItem.setTitle("卸载");
             deleteItem.setTitleColor(Color.WHITE);
-            // add to menu
             menu.addMenuItem(deleteItem);
         }
     };

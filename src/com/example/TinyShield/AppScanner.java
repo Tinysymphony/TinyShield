@@ -1,6 +1,11 @@
 package com.example.TinyShield;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.preference.DialogPreference;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +44,7 @@ public class AppScanner extends Activity{
     private void scanAll() {
         appList = new ArrayList<AppInfo>();
         pm=this.getPackageManager();
-        List<PackageInfo> packages= pm.getInstalledPackages(0);
+        List<PackageInfo> packages= pm.getInstalledPackages(PackageManager.GET_PERMISSIONS);
 
         for(int i=0;i<packages.size();i++){
             PackageInfo packageInfo=packages.get(i);
@@ -50,14 +55,15 @@ public class AppScanner extends Activity{
 
             Log.d(SCAN, packageInfo.packageName);
 
+
+
             AppInfo tmpAppInfo= new AppInfo();
             tmpAppInfo.setAppName(packageInfo.applicationInfo.loadLabel(pm).toString());
             tmpAppInfo.setAppVersion(packageInfo.versionName);
             tmpAppInfo.setVersionCode(packageInfo.versionCode);
             tmpAppInfo.setAppPackageName(packageInfo.packageName);
-            tmpAppInfo.setRisks(permissionCheck(packageInfo.packageName));
+            tmpAppInfo.setPermissionList(packageInfo.requestedPermissions);
             tmpAppInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(pm));
-            tmpAppInfo.setRiskCoefficient();
 
             appList.add(tmpAppInfo);
 
@@ -130,16 +136,39 @@ public class AppScanner extends Activity{
 
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
-            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+            public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-
+                        Toast.makeText(AppScanner.this, "0", Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder analysisBuilder = new AlertDialog.Builder(AppScanner.this);
+                        analysisBuilder.setIcon(R.drawable.ic_launcher);  //TODO
+                        analysisBuilder.setTitle("分析报告");
+                        AppInfo app = (AppInfo) appList.get(position);
+                        analysisBuilder.setMessage(app.analysis());
+                        analysisBuilder.create().show();
                         break;
                     case 1:
-
+                        Intent intent = new Intent();
+                        intent = pm.getLaunchIntentForPackage(((AppInfo)appList.get(position)).getAppPackageName());
+                        startActivity(intent);
                         break;
                     case 2:
-
+                        Toast.makeText(AppScanner.this, "2", Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder unistallBuilder = new AlertDialog.Builder(AppScanner.this);
+                        unistallBuilder.setIcon(R.drawable.ic_launcher);  //TODO
+                        unistallBuilder.setTitle("卸载警告");
+                        unistallBuilder.setMessage("确定卸载该应用吗？");
+                        unistallBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(AppScanner.this, "开始卸载应用", Toast.LENGTH_SHORT).show();
+                                Uri uri = Uri.parse("package:" + ((AppInfo) appList.get(position)).getAppPackageName());
+                                Intent intent = new Intent(Intent.ACTION_DELETE, uri);
+                                startActivity(intent);
+                            }
+                        });
+                        unistallBuilder.setNegativeButton("取消", null);
+                        unistallBuilder.create().show();
                         break;
                 }
                 // false : close the menu; true : not close the menu
@@ -147,19 +176,19 @@ public class AppScanner extends Activity{
             }
         });
 
-    }
-
-    public class TinyAdapter extends BaseAdapter {
-        private LayoutInflater mInflater;
-
-        public TinyAdapter(Context context){
-            this.mInflater=LayoutInflater.from(context);
         }
 
-        @Override
-        public int getCount(){
-            return appList.size();
-        }
+        public class TinyAdapter extends BaseAdapter {
+            private LayoutInflater mInflater;
+
+            public TinyAdapter(Context context){
+                this.mInflater=LayoutInflater.from(context);
+            }
+
+            @Override
+            public int getCount(){
+                return appList.size();
+            }
 
         @Override
         public Object getItem(int arg0){
@@ -181,7 +210,6 @@ public class AppScanner extends Activity{
                 itemHolder.icon=(ImageView)convertView.findViewById(R.id.app);
                 itemHolder.name=(TextView)convertView.findViewById(R.id.appName);
                 itemHolder.pname=(TextView)convertView.findViewById(R.id.packageName);
-                itemHolder.coefficient=(TextView)convertView.findViewById(R.id.coefficient);
                 convertView.setTag(itemHolder);
             } else{
                 itemHolder=(ViewHolder)convertView.getTag();
@@ -190,7 +218,6 @@ public class AppScanner extends Activity{
             itemHolder.name.setText(appInfo.getAppName());
             itemHolder.pname.setText(appInfo.getAppPackageName());
             itemHolder.icon.setImageDrawable(appInfo.getAppIcon());
-            itemHolder.coefficient.setText(appInfo.getRiskCoefficient());
             return convertView;
         }
     }
@@ -198,40 +225,7 @@ public class AppScanner extends Activity{
     class ViewHolder{
         TextView name=null;
         TextView pname=null;
-        TextView coefficient=null;
         ImageView icon=null;
     }
-
-    private boolean[] permissionCheck(String packageName){
-        boolean []risk;
-        risk = new boolean[4];
-        risk[0] = isInternet(packageName);
-        risk[1] = isReadSMS(packageName) && isSendSMS(packageName);
-        risk[2] = isWriteSMS(packageName) && isSendSMS(packageName);
-        risk[3] = isInstallPackage(packageName);
-        return risk;
-    }
-
-    private boolean isInternet(String packageName){
-        return PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.INTERNET", packageName);
-    }
-
-    private boolean isReadSMS(String packageName){
-        return PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.READ_SMS", packageName);
-    }
-
-    private boolean isSendSMS(String packageName){
-        return PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.SEND_SMS", packageName);
-    }
-
-    private boolean isWriteSMS(String packageName){
-        return PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.WRITE_SMS", packageName);
-    }
-
-    private boolean isInstallPackage(String packageName){
-        return PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.INSTALL_PACKAGES", packageName);
-    }
-
-
 
 }

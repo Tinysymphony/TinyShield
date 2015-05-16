@@ -1,5 +1,6 @@
 package com.example.TinyShield;
 
+import android.content.pm.PermissionInfo;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
@@ -15,32 +16,17 @@ public class AppInfo {
     private String appVersion;
     private int versionCode;
     private Drawable appIcon=null;
-    private int[] rights = new int[20];
     private List<String>permissionList = new ArrayList<String>();
 
-    private char[] riskCoefficient = new char[4];
-    private boolean[] risks = new boolean[4];
 
     public AppInfo(){
-        for(boolean item : risks)
-            item = false;
-        for(char item : riskCoefficient)
-            item = '1';
-
     }
 
-    public void setRisks(boolean[] inputRisks){
-        risks = inputRisks;
-    }
 
-    public void setRiskCoefficient(){
-        for(int i=0; i<4; i++){
-            if(risks!=null)
-                if(risks[i] != false)
-                    riskCoefficient[i] = '1';
-                else
-                    riskCoefficient[i] = '0';
-        }
+    public void setPermissionList(String[] permissions){
+        if(permissions != null)
+            for (String permission : permissions)
+                permissionList.add(permission);
     }
 
     public void setAppName(String name){
@@ -63,11 +49,6 @@ public class AppInfo {
         appIcon=icon;
     }
 
-    public void setRights(int[] getRights){
-        rights=getRights;
-    }
-
-    public String getRiskCoefficient() { return String.valueOf(riskCoefficient); }
 
     public String getAppName(){ return this.appName; }
 
@@ -75,8 +56,28 @@ public class AppInfo {
 
     public Drawable getAppIcon(){ return this.appIcon; }
 
-    public String[] getPermissionList() { return (String[])permissionList.toArray(); }
+    public String analysis(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(
+                "应用：" + getAppName() + "\n"
+                + "敏感权限：\n"
+        );
+        if(permissionList.contains("android.permission.INTERNET"))
+            stringBuilder.append(" * " + "使用网络" + "\n");
+        if(permissionList.contains("android.permission.SEND_SMS"))
+            stringBuilder.append(" * " + "发送短信" + "\n");
+        if(permissionList.contains("android.permission.WRITE_SMS"))
+            stringBuilder.append(" * " + "编写短信" + "\n");
+        if(permissionList.contains("android.permission.READ_SMS"))
+            stringBuilder.append(" * " + "查看短信" + "\n");
+        if(permissionList.contains("android.permission.INSTALL_PACKAGES"))
+            stringBuilder.append(" * " + "安装包" + "\n");
 
+        //print all
+        //for(String string : permissionList)
+        //    stringBuilder.append(string+"\n");
+        return stringBuilder.toString();
+    }
 
 }
 

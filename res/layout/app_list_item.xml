@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="50dp">
+              android:layout_height="45dp">
     <ImageView android:id="@+id/app" android:layout_width="wrap_content" android:layout_height="fill_parent"/>
-    <RelativeLayout android:layout_marginLeft="10dp" android:layout_width="fill_parent" android:layout_height="60dp">
+    <RelativeLayout android:layout_marginLeft="10dp" android:layout_width="fill_parent" android:layout_height="45dp">
         <TextView android:id="@+id/name" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:text="AppName:"
+                  android:text="Name:"
                 />
         <TextView android:id="@+id/appName" android:layout_toRightOf="@id/name" android:layout_marginLeft="5dp"
                   android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -21,14 +21,14 @@
                   android:text="Null"
                   android:layout_alignTop="@+id/appPackage" android:layout_toRightOf="@+id/appPackage"
                 />
-        <TextView android:id="@+id/risk" android:layout_below="@id/appPackage"
-                  android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:text="Risk Coefficient:"
-                />
-        <TextView android:id="@+id/coefficient" android:layout_marginLeft="5dp"
-                  android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:text="0.0"
-                  android:layout_alignTop="@+id/risk" android:layout_toRightOf="@+id/risk"
-            />
+        <!--<TextView android:id="@+id/risk" android:layout_below="@id/appPackage"-->
+                  <!--android:layout_width="wrap_content" android:layout_height="wrap_content"-->
+                  <!--android:text="可能风险:"-->
+                <!--/>-->
+        <!--<TextView android:id="@+id/coefficient" android:layout_marginLeft="5dp"-->
+                  <!--android:layout_width="wrap_content" android:layout_height="wrap_content"-->
+                  <!--android:text="0.0"-->
+                  <!--android:layout_alignTop="@+id/risk" android:layout_toRightOf="@+id/risk"-->
+            <!--/>-->
     </RelativeLayout>
 </LinearLayout>

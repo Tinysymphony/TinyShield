@@ -118,7 +118,6 @@ public class AppScanner extends Activity{
             public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        Toast.makeText(AppScanner.this, "0", Toast.LENGTH_SHORT).show();
                         AlertDialog.Builder analysisBuilder = new AlertDialog.Builder(AppScanner.this);
                         analysisBuilder.setIcon(R.drawable.ic_launcher);  //TODO
                         analysisBuilder.setTitle("分析报告");
@@ -132,7 +131,6 @@ public class AppScanner extends Activity{
                         startActivity(intent);
                         break;
                     case 2:
-                        Toast.makeText(AppScanner.this, "2", Toast.LENGTH_SHORT).show();
                         AlertDialog.Builder unistallBuilder = new AlertDialog.Builder(AppScanner.this);
                         unistallBuilder.setIcon(R.drawable.ic_launcher);  //TODO
                         unistallBuilder.setTitle("卸载警告");

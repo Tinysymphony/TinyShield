@@ -1,30 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:flatui="http://schemas.android.com/apk/res/com.example.TinyShield"
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
+              android:background="#fffbfdff"
         >
 
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/turnToApp" android:layout_gravity="center_horizontal"/>
+    <com.cengalabs.flatui.views.FlatButton
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:text="权限分析"
+            android:id="@+id/turnToApp" android:layout_gravity="center_horizontal"
+            flatui:fl_touchEffect="fl_ripple"
+            flatui:fl_blockButtonEffectHeight="2dp"
+            flatui:fl_theme="@array/sky"
+            android:layout_alignParentTop="true" android:layout_alignLeft="@+id/turnToNetwork"
+            android:layout_marginTop="135dp"/>
 
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/turnToNetwork" android:layout_gravity="center_horizontal"/>
+    <com.cengalabs.flatui.views.FlatButton
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:text="流量检测"
+            android:id="@+id/turnToNetwork" android:layout_gravity="center_horizontal"
+            flatui:fl_touchEffect="fl_ripple"
+            flatui:fl_blockButtonEffectHeight="3dp"
+            flatui:fl_theme="@array/sea"
+            android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
 
-    <!--<com.romainpiel.titanic.library.TitanicTextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/loading"-->
-            <!--android:text="@string/loading"-->
-            <!--android:textColor="#212121"-->
-            <!--android:textSize="70sp"-->
-            <!--/>-->
+    <com.cengalabs.flatui.views.FlatButton
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:text="进程管理"
+            android:id="@+id/turnToKiller" android:layout_gravity="center_horizontal"
+            flatui:fl_touchEffect="fl_ripple"
+            flatui:fl_blockButtonEffectHeight="3dp"
+            flatui:fl_theme="@array/sea"
+            android:layout_marginTop="36dp" android:layout_below="@+id/turnToNetwork"
+            android:layout_alignLeft="@+id/turnToNetwork"/>
 
-</LinearLayout>
+
+</RelativeLayout>
 

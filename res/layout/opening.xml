@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-        >
+              android:layout_height="fill_parent" android:background="#695b8e">
 
     <com.romainpiel.titanic.library.TitanicTextView
             android:layout_width="wrap_content"
@@ -11,8 +10,20 @@
             android:gravity="center"
             android:id="@+id/loading"
             android:text="@string/loading"
-            android:textColor="#212121"
+            android:textColor="#695b8e"
             android:textSize="80sp"
             android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
+
+    <com.romainpiel.titanic.library.TitanicTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:id="@+id/click"
+            android:text="@string/click"
+            android:textColor="#695b8e"
+            android:textSize="40sp"
+            android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"
+            android:layout_marginBottom="32dp"/>
+
 </RelativeLayout>
 

@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:flatui="http://schemas.android.com/apk/res/com.example.TinyShield"
               android:orientation="horizontal"
               android:layout_width="match_parent"
+              android:background="#fff7fcff"
               android:layout_height="50dp">
-    <ImageView android:id="@+id/app" android:layout_width="50dp" android:layout_height="fill_parent"/>
-    <RelativeLayout android:layout_marginLeft="10dp" android:layout_width="fill_parent" android:layout_height="50dp">
-        <TextView android:id="@+id/name" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:text="Name:"
+    <ImageView android:id="@+id/app" android:layout_width="50dp" android:layout_height="fill_parent" android:layout_marginLeft="5dp"/>
+    <RelativeLayout android:layout_marginLeft="10dp" android:layout_width="fill_parent" android:layout_height="50dp" >
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/name" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Name:" flatui:fl_theme="@array/deep"
                 />
-        <TextView android:id="@+id/appName" android:layout_toRightOf="@id/name" android:layout_marginLeft="5dp"
-                  android:layout_width="wrap_content" android:layout_height="wrap_content"
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/appName" android:layout_toRightOf="@id/name" android:layout_marginLeft="5dp"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
                   android:text="App"
                 />
-        <TextView android:id="@+id/appPackage" android:layout_below="@id/name"
-                  android:layout_width="wrap_content" android:layout_height="wrap_content"
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/appPackage" android:layout_below="@id/name"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
                   android:text="Package:"
                 />
-        <TextView android:id="@+id/packageName" android:layout_marginLeft="5dp"
-                  android:layout_width="wrap_content" android:layout_height="wrap_content"
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/packageName" android:layout_marginLeft="5dp"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
                   android:text="Null"
                   android:layout_alignTop="@+id/appPackage" android:layout_toRightOf="@+id/appPackage"
                 />
-        <!--<TextView android:id="@+id/risk" android:layout_below="@id/appPackage"-->
-                  <!--android:layout_width="wrap_content" android:layout_height="wrap_content"-->
-                  <!--android:text="可能风险:"-->
-                <!--/>-->
-        <!--<TextView android:id="@+id/coefficient" android:layout_marginLeft="5dp"-->
-                  <!--android:layout_width="wrap_content" android:layout_height="wrap_content"-->
-                  <!--android:text="0.0"-->
-                  <!--android:layout_alignTop="@+id/risk" android:layout_toRightOf="@+id/risk"-->
-            <!--/>-->
+
     </RelativeLayout>
 </LinearLayout>

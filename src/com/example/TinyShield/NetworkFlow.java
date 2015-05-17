@@ -20,6 +20,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.cengalabs.flatui.views.FlatTextView;
 import com.github.mikephil.charting.charts.LineChart;
+import com.romainpiel.titanic.library.TitanicTextView;
+import com.romainpiel.titanic.library.Typefaces;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,7 @@ public class NetworkFlow extends Activity {
     private final static String ACT = "Network Flow";
     private final static String NET = "android.permission.INTERNET";
 
+    private TitanicTextView textView;
     private ListView listView;
     private PackageManager pm;
     private List<AppNetwork> appList = new ArrayList<AppNetwork>();
@@ -44,6 +47,9 @@ public class NetworkFlow extends Activity {
         pm = getPackageManager();
 
         scanNetworkFlow();
+
+        textView = (TitanicTextView) findViewById(R.id.top);
+        textView.setTypeface(Typefaces.get(this, "fonts/Satisfy-Regular.ttf"));
 
         listView = (ListView)findViewById(R.id.networkList);
         listView.setAdapter(new NetAdapter(this));

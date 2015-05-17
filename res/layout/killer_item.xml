@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:flatui="http://schemas.android.com/apk/res/com.example.TinyShield"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:background="#fff9fff9"
+              android:layout_height="60dp">
+    <!--<ImageView android:id="@+id/picon"  android:layout_width="50dp" android:layout_height="fill_parent" android:layout_margin="5dp"/>-->
+    <RelativeLayout android:layout_marginLeft="10dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/process_name" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Process Name:" flatui:fl_theme="@array/deep"
+                />
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/processName" android:layout_toRightOf="@id/process_name" android:layout_marginLeft="5dp"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
+                  android:text=""
+                />
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/pid" android:layout_below="@id/process_name"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
+                  android:text="PID:"
+                />
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/pidvalue" android:layout_marginLeft="5dp"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
+                  android:text=""
+                  android:layout_alignTop="@+id/pid" android:layout_toRightOf="@+id/pid"/>
+
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/memory" android:layout_below="@id/pid"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
+                  android:text="Memory:"
+                />
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/memoryvalue" android:layout_marginLeft="5dp"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
+                  android:text=""
+                  android:layout_alignTop="@+id/memory" android:layout_toRightOf="@+id/memory"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

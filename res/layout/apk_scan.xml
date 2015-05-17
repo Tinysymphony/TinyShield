@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
-              android:background="#fffffefd"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
@@ -16,7 +14,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:id="@+id/top"
-                android:text="@string/app_scan"
+                android:text="@string/apk_scan"
                 android:textColor="#FFFFFF"
                 android:textSize="55sp"
                 android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
@@ -24,10 +22,8 @@
     </RelativeLayout>
 
     <com.baoyz.swipemenulistview.SwipeMenuListView
-            android:id="@+id/mylist"
+            android:id="@+id/apk_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-
+            android:layout_height="match_parent" />
 
 </LinearLayout>

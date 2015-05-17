@@ -46,8 +46,23 @@ public class DashBorad extends Activity {
             }
         });
 
+        apkScanButton = (Button)findViewById(R.id.turnToApk);
+        apkScanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DashBorad.this, ApkScanner.class);
+                startActivity(intent);
+            }
+        });
 
-
+        processButton = (Button)findViewById(R.id.turnToKiller);
+        processButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DashBorad.this, TaskKiller.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }

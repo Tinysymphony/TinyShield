@@ -25,6 +25,8 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.cengalabs.flatui.views.FlatCheckBox;
 import com.cengalabs.flatui.views.FlatRadioButton;
 import com.cengalabs.flatui.views.FlatTextView;
+import com.romainpiel.titanic.library.TitanicTextView;
+import com.romainpiel.titanic.library.Typefaces;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +39,7 @@ import java.util.List;
 public class AppScanner extends Activity{
 
     private final static String ACT ="Scanner";
-    //private ListView listView;
+    private TitanicTextView textView;
     private ArrayList appList;
     private SwipeMenuListView listView;
     PackageManager pm;
@@ -110,6 +112,8 @@ public class AppScanner extends Activity{
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.app_list);
 
+        textView = (TitanicTextView) findViewById(R.id.top);
+        textView.setTypeface(Typefaces.get(this, "fonts/Satisfy-Regular.ttf"));
 
         scanAll();
 

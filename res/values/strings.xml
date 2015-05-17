@@ -6,6 +6,9 @@
     <string name="sms">SMS</string>
     <string name="file">File</string>
     <string name="contact">Contacts</string>
-    <string name="font">fonts/Satisfy-Regular.ttf</string>
+    <string name="network">Network Flow</string>
+    <string name="app_scan">App Scan</string>
+    <string name="apk_scan">Apk Scan</string>
+    <string name="process_scan">Process Scan</string>
 
 </resources>

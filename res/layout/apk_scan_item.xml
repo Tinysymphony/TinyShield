@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:flatui="http://schemas.android.com/apk/res/com.example.TinyShield"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:background="#fff7fcff"
+              android:layout_height="60dp">
+    <ImageView android:id="@+id/sdk" android:layout_width="50dp" android:layout_height="fill_parent" android:layout_marginLeft="5dp"/>
+    <RelativeLayout android:layout_marginLeft="10dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/sdk_name" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="AppName:" flatui:fl_theme="@array/deep"
+                />
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/sdkName" android:layout_toRightOf="@id/sdk_name" android:layout_marginLeft="5dp"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
+                  android:text="App"
+                />
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/sdkPackage" android:layout_below="@id/sdk_name"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
+                  android:text="Package:"
+                />
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/sdkPackageName" android:layout_marginLeft="5dp"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
+                  android:text=""
+                  android:layout_alignTop="@+id/sdkPackage" android:layout_toRightOf="@+id/sdkPackage"/>
+
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/md5" android:layout_below="@id/sdkPackage"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
+                  android:text="MD5:"
+                />
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/md5Value" android:layout_marginLeft="5dp"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
+                  android:text=""
+                  android:layout_alignTop="@+id/md5" android:layout_toRightOf="@+id/md5"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

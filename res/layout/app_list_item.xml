@@ -5,7 +5,7 @@
               android:layout_width="match_parent"
               android:background="#fff7fcff"
               android:layout_height="60dp">
-    <ImageView android:id="@+id/app" android:layout_width="60dp" android:layout_height="fill_parent" android:layout_marginLeft="5dp"/>
+    <ImageView android:id="@+id/app" android:layout_width="50dp" android:layout_height="fill_parent" android:layout_marginLeft="5dp"/>
     <RelativeLayout android:layout_marginLeft="10dp" android:layout_width="fill_parent" android:layout_height="60dp" >
         <com.cengalabs.flatui.views.FlatTextView android:id="@+id/name" android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:text="应用:" flatui:fl_theme="@array/deep"

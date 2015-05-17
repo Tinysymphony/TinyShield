@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import com.romainpiel.titanic.library.TitanicTextView;
+import com.romainpiel.titanic.library.Typefaces;
 
 /**
  * Created by tiny on 5/17/15.
@@ -13,7 +15,9 @@ import android.widget.Button;
 public class DashBorad extends Activity {
     private Button appScanButton;
     private Button networkFlowButton;
-
+    private Button processButton;
+    private Button apkScanButton;
+    private TitanicTextView textView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -21,6 +25,8 @@ public class DashBorad extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dash_board);
 
+        textView = (TitanicTextView) findViewById(R.id.top);
+        textView.setTypeface(Typefaces.get(this, "fonts/Satisfy-Regular.ttf"));
 
         appScanButton = (Button)findViewById(R.id.turnToApp);
         appScanButton.setOnClickListener(new View.OnClickListener() {
@@ -39,6 +45,8 @@ public class DashBorad extends Activity {
                 startActivity(intent);
             }
         });
+
+
 
     }
 

@@ -74,13 +74,43 @@ public class AppInfo {
             stringBuilder.append(" * " + "重启手机" + "\n");
         if(permissionList.contains("android.permission.BRICK"))
             stringBuilder.append(" * " + "禁用手机" + "\n");
-
+        if(permissionList.contains("android.permission.PROCESS_OUTGOING_CALLS"))
+            stringBuilder.append(" * " + "监听修改或者放弃通话" + "\n");
+        if(permissionList.contains("android.permission.READ_LOGS"))
+            stringBuilder.append(" * " + "读取系统底层日志" + "\n");
+        if(permissionList.contains("android.permission.WRITE_SECURE_SETTINGS"))
+            stringBuilder.append(" * " + "修改系统安全设置项" + "\n");
+        if(permissionList.contains("android.permission.KILL_BACKGROUND_PROCESSES"))
+            stringBuilder.append(" * " + "结束后台进程" + "\n");
+        if(permissionList.contains("android.permission.MOUNT_FORMAT_FILESYSTEMS"))
+            stringBuilder.append(" * " + "格式化文件系统" + "\n");
 
         //print all
         //for(String string : permissionList)
         //    stringBuilder.append(string+"\n");
         return stringBuilder.toString();
     }
+
+    public boolean isSMS(){
+        return permissionList.contains("android.permission.WRITE_SMS")
+                && permissionList.contains("android.permission.READ_SMS")
+                && permissionList.contains("android.permission.SEND_SMS");
+    }
+
+    public boolean isContact(){
+        return permissionList.contains("android.permission.READ_CONTACTS")
+                && permissionList.contains("android.permission.INTERNET");
+    }
+
+    public boolean isFile(){
+        return permissionList.contains("android.permission.MOUNT_FORMAT_FILESYSTEMS")
+                && permissionList.contains("android.permission.MOUNT_UNMOUNT_FILESYSTEMS");
+    }
+
+    public boolean isBlue() {
+        return permissionList.contains("android.permission.BLUETOOTH_ADMIN");
+    }
+
 
 }
 

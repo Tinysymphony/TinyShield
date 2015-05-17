@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:flatui="http://schemas.android.com/apk/res/com.example.TinyShield"
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:background="#fff9fff9"
@@ -7,27 +8,27 @@
 
     <ImageView android:id="@+id/network" android:layout_width="50dp" android:layout_height="fill_parent" android:layout_margin="5dp"/>
     <RelativeLayout android:layout_marginLeft="10dp" android:layout_width="fill_parent" android:layout_height="60dp" android:textColor="#ff22acff">
-        <TextView android:id="@+id/name" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:text="Name:"
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/name" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Name:" flatui:fl_theme="@array/deep"
                 />
-        <TextView android:id="@+id/appName" android:layout_toRightOf="@id/name" android:layout_marginLeft="5dp"
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/appName" android:layout_toRightOf="@id/name" android:layout_marginLeft="5dp"
                   android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:text="App"
+                  android:text="App" flatui:fl_theme="@array/deep"
                 />
-        <TextView android:id="@+id/received" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:text="Received Data:" android:layout_below="@id/name"
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/received" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Received Data:" android:layout_below="@id/name" flatui:fl_theme="@array/deep"
                 />
-        <TextView android:id="@+id/receivedData"
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/receivedData" flatui:fl_theme="@array/deep"
                   android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:text="0.0"
                   android:layout_marginLeft="5dp"
                   android:layout_alignTop="@+id/received" android:layout_toRightOf="@+id/received"/>
-        <TextView android:id="@+id/sent" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:text="Sent Data:" android:layout_below="@id/received"
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/sent" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="Sent Data:" android:layout_below="@id/received" flatui:fl_theme="@array/deep"
                 />
-        <TextView android:id="@+id/sentData"
+        <com.cengalabs.flatui.views.FlatTextView android:id="@+id/sentData"
                   android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:layout_marginLeft="5dp"
+                  android:layout_marginLeft="5dp" flatui:fl_theme="@array/deep"
                   android:text="0.0"
                   android:layout_alignTop="@+id/sent" android:layout_toRightOf="@+id/sent"/>
     </RelativeLayout>

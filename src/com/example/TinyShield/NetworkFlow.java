@@ -18,6 +18,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.cengalabs.flatui.views.FlatTextView;
 import com.github.mikephil.charting.charts.LineChart;
 
 import java.util.ArrayList;
@@ -106,15 +107,19 @@ public class NetworkFlow extends Activity {
                 holder.name=(TextView)convertView.findViewById(R.id.appName);
                 holder.received=(TextView)convertView.findViewById(R.id.receivedData);
                 holder.sent=(TextView)convertView.findViewById(R.id.sentData);
+
                 convertView.setTag(holder);
             } else{
                 holder=(ViewHolder)convertView.getTag();
             }
 
             holder.name.setText(app.name);
-            holder.received.setText(String.valueOf(app.receivedMessage)+" Bytes");
-            holder.sent.setText(String.valueOf(app.sentMessage)+" Bytes");
+            holder.received.setText(String.valueOf(app.receivedMessage) + " Bytes");
+            holder.sent.setText(String.valueOf(app.sentMessage) + " Bytes");
             holder.icon.setImageDrawable(app.icon);
+
+            convertView.setBackgroundColor(getFocus(app.receivedMessage + app.sentMessage));
+
             return convertView;
         }
 
@@ -132,6 +137,19 @@ public class NetworkFlow extends Activity {
         TextView received=null;
         TextView sent=null;
         ImageView icon=null;
+    }
+
+    //using different color according to data
+    private int getFocus(long data){
+        if(data != 0)
+            if(data > 100000)
+                return getResources().getColor(R.color.blood_dark);
+            else if(data > 20000)
+                return getResources().getColor(R.color.orange_dark);
+            else
+                return getResources().getColor(R.color.sand_dark);
+        else
+            return getResources().getColor(R.color.snow_light);
     }
 
 }

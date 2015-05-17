@@ -4,11 +4,11 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:background="#fff7fcff"
-              android:layout_height="50dp">
-    <ImageView android:id="@+id/app" android:layout_width="50dp" android:layout_height="fill_parent" android:layout_marginLeft="5dp"/>
-    <RelativeLayout android:layout_marginLeft="10dp" android:layout_width="fill_parent" android:layout_height="50dp" >
+              android:layout_height="60dp">
+    <ImageView android:id="@+id/app" android:layout_width="60dp" android:layout_height="fill_parent" android:layout_marginLeft="5dp"/>
+    <RelativeLayout android:layout_marginLeft="10dp" android:layout_width="fill_parent" android:layout_height="60dp" >
         <com.cengalabs.flatui.views.FlatTextView android:id="@+id/name" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:text="Name:" flatui:fl_theme="@array/deep"
+                  android:text="应用:" flatui:fl_theme="@array/deep"
                 />
         <com.cengalabs.flatui.views.FlatTextView android:id="@+id/appName" android:layout_toRightOf="@id/name" android:layout_marginLeft="5dp"
                   android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
@@ -16,12 +16,51 @@
                 />
         <com.cengalabs.flatui.views.FlatTextView android:id="@+id/appPackage" android:layout_below="@id/name"
                   android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
-                  android:text="Package:"
+                  android:text="包名:"
                 />
         <com.cengalabs.flatui.views.FlatTextView android:id="@+id/packageName" android:layout_marginLeft="5dp"
                   android:layout_width="wrap_content" android:layout_height="wrap_content" flatui:fl_theme="@array/deep"
                   android:text="Null"
                   android:layout_alignTop="@+id/appPackage" android:layout_toRightOf="@+id/appPackage"
+                />
+
+        <com.cengalabs.flatui.views.FlatRadioButton
+                  android:id="@+id/sms"
+                  android:layout_height="wrap_content"
+                  android:layout_width="wrap_content"
+                  android:enabled="false"
+                  android:checked="false"
+                  android:text="@string/sms"
+                  flatui:fl_theme="@array/grape"
+                  android:layout_below="@id/appPackage"
+            />
+
+        <com.cengalabs.flatui.views.FlatRadioButton
+                android:id="@+id/file"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:enabled="false"
+                android:checked="false"
+                android:text="@string/file"
+                flatui:fl_theme="@array/grape"
+                android:layout_below="@id/appPackage"
+                android:layout_marginLeft="10dp"
+                android:layout_alignTop="@id/sms"
+                android:layout_toRightOf="@id/sms"
+                />
+
+        <com.cengalabs.flatui.views.FlatRadioButton
+                android:id="@+id/contact"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:enabled="false"
+                android:checked="false"
+                android:text="@string/contact"
+                flatui:fl_theme="@array/grape"
+                android:layout_below="@id/appPackage"
+                android:layout_marginLeft="10dp"
+                android:layout_alignTop="@id/file"
+                android:layout_toRightOf="@id/file"
                 />
 
     </RelativeLayout>

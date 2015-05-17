@@ -22,6 +22,9 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.cengalabs.flatui.views.FlatCheckBox;
+import com.cengalabs.flatui.views.FlatRadioButton;
+import com.cengalabs.flatui.views.FlatTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -185,12 +188,22 @@ public class AppScanner extends Activity{
                     convertView = mInflater.inflate(R.layout.app_list_item,null);
                     itemHolder = new ViewHolder();
                     itemHolder.icon=(ImageView)convertView.findViewById(R.id.app);
-                    itemHolder.name=(TextView)convertView.findViewById(R.id.appName);
-                    itemHolder.pname=(TextView)convertView.findViewById(R.id.packageName);
+                    itemHolder.name=(FlatTextView)convertView.findViewById(R.id.appName);
+                    itemHolder.pname=(FlatTextView)convertView.findViewById(R.id.packageName);
                     convertView.setTag(itemHolder);
                 } else{
                     itemHolder=(ViewHolder)convertView.getTag();
                 }
+
+                if(appInfo.isSMS())
+                    ((FlatRadioButton)convertView.findViewById(R.id.sms)).setChecked(true);
+
+                if(appInfo.isFile())
+                    ((FlatRadioButton)convertView.findViewById(R.id.file)).setChecked(true);
+
+                if(appInfo.isContact())
+                    ((FlatRadioButton)convertView.findViewById(R.id.contact)).setChecked(true);
+
 
                 itemHolder.name.setText(appInfo.getAppName());
                 itemHolder.pname.setText(appInfo.getAppPackageName());
@@ -200,8 +213,8 @@ public class AppScanner extends Activity{
         }
 
     private class ViewHolder{
-        TextView name=null;
-        TextView pname=null;
+        FlatTextView name=null;
+        FlatTextView pname=null;
         ImageView icon=null;
     }
 

@@ -16,11 +16,10 @@ public class Opening extends Activity {
     /**
      * Called when the activity is first created.
      */
-    private final static int DELAY = 4000;
+    private final static int DELAY = 3000;
     private Titanic titanic;
     private TitanicTextView title;
     private TitanicTextView click;
-    private boolean isLoad = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,12 +49,9 @@ public class Opening extends Activity {
                     }
                 });
                 titanic.cancel();
-                isLoad = true;
             }
         },DELAY);
 
     }
-
-
 
 }

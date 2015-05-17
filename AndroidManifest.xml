@@ -12,6 +12,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".DashBorad"/>
         <activity android:name=".NetworkFlow"/>
         <activity android:name=".AppScanner" />
     </application>

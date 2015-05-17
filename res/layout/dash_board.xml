@@ -17,5 +17,14 @@
             android:text="New Button"
             android:id="@+id/turnToNetwork" android:layout_gravity="center_horizontal"/>
 
+    <!--<com.romainpiel.titanic.library.TitanicTextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/loading"-->
+            <!--android:text="@string/loading"-->
+            <!--android:textColor="#212121"-->
+            <!--android:textSize="70sp"-->
+            <!--/>-->
+
 </LinearLayout>
 

@@ -4,40 +4,61 @@ import android.app.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.os.Handler;
 import android.view.Window;
-import android.widget.Button;
+//import android.widget.Button;
+import com.romainpiel.titanic.library.Titanic;
+import com.romainpiel.titanic.library.TitanicTextView;
+import com.romainpiel.titanic.library.Typefaces;
 
 public class MainBoard extends Activity {
     /**
      * Called when the activity is first created.
      */
-    private Button appScanButton;
-    private Button networkFlowButton;
+    private final static int DELAY = 4000;
+//    private Button appScanButton;
+//    private Button networkFlowButton;
+    private Titanic titanic;
+    private TitanicTextView textView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.main);
+        setContentView(R.layout.opening);
 
-        appScanButton = (Button)findViewById(R.id.turnToApp);
-        appScanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainBoard.this, AppScanner.class);
-                startActivity(intent);
-            }
-        });
+        titanic = new Titanic();
+        textView = (TitanicTextView)findViewById(R.id.loading);
+        textView.setTypeface(Typefaces.get(this, "Satisfy-Regular.ttf"));
+        titanic.start(textView);
 
-        networkFlowButton = (Button)findViewById(R.id.turnToNetwork);
-        networkFlowButton.setOnClickListener(new View.OnClickListener(){
+        new Handler().postDelayed(new Runnable() {
             @Override
-        public  void onClick(View v){
-                Intent intent = new Intent(MainBoard.this, NetworkFlow.class);
+            public void run() {
+                titanic.cancel();
+                Intent intent = new Intent(MainBoard.this, DashBorad.class);
                 startActivity(intent);
+                finish();
             }
-        });
+        },DELAY);
+
+//        appScanButton = (Button)findViewById(R.id.turnToApp);
+//        appScanButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainBoard.this, AppScanner.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        networkFlowButton = (Button)findViewById(R.id.turnToNetwork);
+//        networkFlowButton.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//        public  void onClick(View v){
+//                Intent intent = new Intent(MainBoard.this, NetworkFlow.class);
+//                startActivity(intent);
+//            }
+//        });
 
     }
 

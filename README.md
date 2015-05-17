@@ -4,7 +4,7 @@
 #####*wytiny 2015*
 --------
 
-@(Android)[Permission,Apk,Network flow,Process]
+> Android | Permission | Apk | Network flow | Process 
 
 ### ZJU SRTP Project
 

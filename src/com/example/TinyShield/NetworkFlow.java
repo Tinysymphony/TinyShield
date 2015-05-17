@@ -1,13 +1,23 @@
 package com.example.TinyShield;
 
 import android.app.Activity;
+import android.appwidget.AppWidgetProvider;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.TrafficStats;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.github.mikephil.charting.charts.LineChart;
 
 import java.util.ArrayList;
@@ -20,10 +30,9 @@ public class NetworkFlow extends Activity {
     private final static String ACT = "Network Flow";
     private final static String NET = "android.permission.INTERNET";
 
+    private ListView listView;
     private PackageManager pm;
     private List<AppNetwork> appList = new ArrayList<AppNetwork>();
-
-    //LineChart chart = (LineChart)findViewById(R.id.chart);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,9 +41,11 @@ public class NetworkFlow extends Activity {
         setContentView(R.layout.network);
 
         pm = getPackageManager();
+
         scanNetworkFlow();
 
-        //chart.setBackgroundColor(0x451023);
+        listView = (ListView)findViewById(R.id.networkList);
+        listView.setAdapter(new NetAdapter(this));
 
     }
 
@@ -54,18 +65,73 @@ public class NetworkFlow extends Activity {
                         app.name = info.applicationInfo.loadLabel(pm).toString();
                         app.receivedMessage = rx;
                         app.sentMessage = tx;
+                        app.icon=info.applicationInfo.loadIcon(pm);
                         appList.add(app);
                     }
             }
         }
+        Log.d(ACT, "Finish getting the network flow data");
     }
 
-    class AppNetwork{
+    private class NetAdapter extends BaseAdapter{
+        private LayoutInflater mInflater;
+
+        public NetAdapter(Context context){
+            this.mInflater=LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount(){
+            return appList.size();
+        }
+
+        @Override
+        public Object getItem(int arg0){
+            return null;
+        }
+
+        @Override
+        public long getItemId(int arg0){
+            return 0;
+        }
+
+        @Override
+        public View getView(int position,View convertView, ViewGroup parent){
+            AppNetwork app = (AppNetwork) appList.get(position);
+            ViewHolder holder;
+            if(convertView==null){
+                convertView = mInflater.inflate(R.layout.net_list_item,null);
+                holder = new ViewHolder();
+                holder.icon=(ImageView)convertView.findViewById(R.id.network);
+                holder.name=(TextView)convertView.findViewById(R.id.appName);
+                holder.received=(TextView)convertView.findViewById(R.id.receivedData);
+                holder.sent=(TextView)convertView.findViewById(R.id.sentData);
+                convertView.setTag(holder);
+            } else{
+                holder=(ViewHolder)convertView.getTag();
+            }
+
+            holder.name.setText(app.name);
+            holder.received.setText(String.valueOf(app.receivedMessage)+" Bytes");
+            holder.sent.setText(String.valueOf(app.sentMessage)+" Bytes");
+            holder.icon.setImageDrawable(app.icon);
+            return convertView;
+        }
+
+    }
+
+    private class AppNetwork{
         public String name=null;
         public long receivedMessage=0;
         public long sentMessage=0;
+        public Drawable icon=null;
     }
 
-
+    private class ViewHolder{
+        TextView name=null;
+        TextView received=null;
+        TextView sent=null;
+        ImageView icon=null;
+    }
 
 }

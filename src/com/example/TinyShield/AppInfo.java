@@ -13,15 +13,11 @@ import java.util.List;
 public class AppInfo {
     private String appName;
     private String appPackageName;
-    private String appVersion;
-    private int versionCode;
     private Drawable appIcon=null;
     private List<String>permissionList = new ArrayList<String>();
 
-
     public AppInfo(){
     }
-
 
     public void setPermissionList(String[] permissions){
         if(permissions != null)
@@ -35,14 +31,6 @@ public class AppInfo {
 
     public void setAppPackageName(String packageName){
         appPackageName=packageName;
-    }
-
-    public void setAppVersion(String version){
-        appVersion=version;
-    }
-
-    public  void setVersionCode(int code){
-        versionCode=code;
     }
 
     public  void setAppIcon(Drawable icon){
@@ -72,6 +60,21 @@ public class AppInfo {
             stringBuilder.append(" * " + "查看短信" + "\n");
         if(permissionList.contains("android.permission.INSTALL_PACKAGES"))
             stringBuilder.append(" * " + "安装包" + "\n");
+        if(permissionList.contains("android.permission.READ_CONTACTS"))
+            stringBuilder.append(" * " + "读取联系人" + "\n");
+        if(permissionList.contains("android.permission.ACCESS_FINE_LOCATION"))
+            stringBuilder.append(" * " + "GPS定位" + "\n");
+        if(permissionList.contains("android.permission.BLUETOOTH_ADMIN"))
+            stringBuilder.append(" * " + "管理蓝牙" + "\n");
+        if(permissionList.contains("android.permission.CALL_PHONE"))
+            stringBuilder.append(" * " + "拨打电话" + "\n");
+        if(permissionList.contains("android.permission.MANAGE_ACCOUNTS"))
+            stringBuilder.append(" * " + "管理账户" + "\n");
+        if(permissionList.contains("android.permission.REBOOT"))
+            stringBuilder.append(" * " + "重启手机" + "\n");
+        if(permissionList.contains("android.permission.BRICK"))
+            stringBuilder.append(" * " + "禁用手机" + "\n");
+
 
         //print all
         //for(String string : permissionList)

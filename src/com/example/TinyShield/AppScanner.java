@@ -53,8 +53,6 @@ public class AppScanner extends Activity{
 
             AppInfo tmpAppInfo= new AppInfo();
             tmpAppInfo.setAppName(packageInfo.applicationInfo.loadLabel(pm).toString());
-            tmpAppInfo.setAppVersion(packageInfo.versionName);
-            tmpAppInfo.setVersionCode(packageInfo.versionCode);
             tmpAppInfo.setAppPackageName(packageInfo.packageName);
             tmpAppInfo.setPermissionList(packageInfo.requestedPermissions);
             tmpAppInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(pm));
@@ -109,14 +107,12 @@ public class AppScanner extends Activity{
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.app_list);
 
-        listView=(SwipeMenuListView)findViewById(R.id.mylist);
 
         scanAll();
 
-        listView.setAdapter(new TinyAdapter(this));
-
+        listView=(SwipeMenuListView)findViewById(R.id.mylist);
+        listView.setAdapter(new InfoAdapter(this));
         listView.setMenuCreator(creator);
-
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
@@ -161,10 +157,10 @@ public class AppScanner extends Activity{
 
         }
 
-        public class TinyAdapter extends BaseAdapter {
+        public class InfoAdapter extends BaseAdapter {
             private LayoutInflater mInflater;
 
-            public TinyAdapter(Context context){
+            public InfoAdapter(Context context){
                 this.mInflater=LayoutInflater.from(context);
             }
 
@@ -173,39 +169,39 @@ public class AppScanner extends Activity{
                 return appList.size();
             }
 
-        @Override
-        public Object getItem(int arg0){
-            return null;
-        }
-
-        @Override
-        public long getItemId(int arg0){
-            return 0;
-        }
-
-        @Override
-        public View getView(int position,View convertView, ViewGroup parent){
-            AppInfo appInfo =(AppInfo) appList.get(position);
-            ViewHolder itemHolder;
-            if(convertView==null){
-                convertView = mInflater.inflate(R.layout.app_list_item,null);
-                itemHolder = new ViewHolder();
-                itemHolder.icon=(ImageView)convertView.findViewById(R.id.app);
-                itemHolder.name=(TextView)convertView.findViewById(R.id.appName);
-                itemHolder.pname=(TextView)convertView.findViewById(R.id.packageName);
-                convertView.setTag(itemHolder);
-            } else{
-                itemHolder=(ViewHolder)convertView.getTag();
+            @Override
+            public Object getItem(int arg0){
+                return null;
             }
 
-            itemHolder.name.setText(appInfo.getAppName());
-            itemHolder.pname.setText(appInfo.getAppPackageName());
-            itemHolder.icon.setImageDrawable(appInfo.getAppIcon());
-            return convertView;
-        }
-    }
+            @Override
+            public long getItemId(int arg0){
+                return 0;
+            }
 
-    class ViewHolder{
+            @Override
+            public View getView(int position,View convertView, ViewGroup parent){
+                AppInfo appInfo =(AppInfo) appList.get(position);
+                ViewHolder itemHolder;
+                if(convertView==null){
+                    convertView = mInflater.inflate(R.layout.app_list_item,null);
+                    itemHolder = new ViewHolder();
+                    itemHolder.icon=(ImageView)convertView.findViewById(R.id.app);
+                    itemHolder.name=(TextView)convertView.findViewById(R.id.appName);
+                    itemHolder.pname=(TextView)convertView.findViewById(R.id.packageName);
+                    convertView.setTag(itemHolder);
+                } else{
+                    itemHolder=(ViewHolder)convertView.getTag();
+                }
+
+                itemHolder.name.setText(appInfo.getAppName());
+                itemHolder.pname.setText(appInfo.getAppPackageName());
+                itemHolder.icon.setImageDrawable(appInfo.getAppIcon());
+                return convertView;
+            }
+        }
+
+    private class ViewHolder{
         TextView name=null;
         TextView pname=null;
         ImageView icon=null;

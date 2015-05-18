@@ -13,6 +13,7 @@ import java.util.List;
 public class AppInfo {
     private String appName;
     private String appPackageName;
+    private String version;
     private Drawable appIcon=null;
     private List<String>permissionList = new ArrayList<String>();
 
@@ -109,6 +110,14 @@ public class AppInfo {
 
     public boolean isBlue() {
         return permissionList.contains("android.permission.BLUETOOTH_ADMIN");
+    }
+
+    public void setVersion(String appVersion){
+        version = appVersion;
+    }
+
+    public String getVersion(){
+        return version;
     }
 
 

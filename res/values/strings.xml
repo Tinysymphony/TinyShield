@@ -10,4 +10,6 @@
     <string name="app_scan">App Scan</string>
     <string name="apk_scan">Apk Scan</string>
     <string name="process_scan">Process Scan</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

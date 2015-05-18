@@ -114,4 +114,9 @@ public class MD5get {
         long end = System.currentTimeMillis();
         System.out.println("md5:" + md5 + " time:" + ((end - begin) / 1000) + "s");
     }
+
+    public static boolean checkFromServer(String packageName, String versionName, String versionCode, String md5){
+        //
+        return true;
+    }
 }

@@ -24,6 +24,7 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.cengalabs.flatui.views.FlatRadioButton;
 import com.cengalabs.flatui.views.FlatTextView;
+import com.me.drakeet.materialdialog.MaterialDialog;
 import com.romainpiel.titanic.library.TitanicTextView;
 import com.romainpiel.titanic.library.Typefaces;
 
@@ -124,12 +125,16 @@ public class AppScanner extends Activity{
             public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        AlertDialog.Builder analysisBuilder = new AlertDialog.Builder(AppScanner.this);
-                        analysisBuilder.setIcon(R.drawable.ic_launcher);  //TODO
-                        analysisBuilder.setTitle("分析报告");
                         AppInfo app = (AppInfo) appList.get(position);
-                        analysisBuilder.setMessage(app.analysis());
-                        analysisBuilder.create().show();
+                        final MaterialDialog analysisDialog = new MaterialDialog(AppScanner.this);
+                        analysisDialog.setTitle("分析报告").setMessage(app.analysis())
+                                .setPositiveButton("OK", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        analysisDialog.dismiss();
+                                    }
+                                }).show();
+
                         break;
                     case 1:
                         Intent intent = new Intent();
@@ -137,24 +142,27 @@ public class AppScanner extends Activity{
                         startActivity(intent);
                         break;
                     case 2:
-                        AlertDialog.Builder unistallBuilder = new AlertDialog.Builder(AppScanner.this);
-                        unistallBuilder.setIcon(R.drawable.ic_launcher);  //TODO
-                        unistallBuilder.setTitle("卸载警告");
-                        unistallBuilder.setMessage("确定卸载该应用吗？");
-                        unistallBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(AppScanner.this, "开始卸载应用", Toast.LENGTH_SHORT).show();
-                                Uri uri = Uri.parse("package:" + ((AppInfo) appList.get(position)).getAppPackageName());
-                                Intent intent = new Intent(Intent.ACTION_DELETE, uri);
-                                startActivity(intent);
-                            }
-                        });
-                        unistallBuilder.setNegativeButton("取消", null);
-                        unistallBuilder.create().show();
+                        AppInfo tmpApp = (AppInfo) appList.get(position);
+                        final MaterialDialog unistallDialog = new MaterialDialog(AppScanner.this);
+                        final String target = tmpApp.getAppName();
+                        unistallDialog.setTitle("卸载应用").setMessage("确定要卸载"+target+"?")
+                                .setPositiveButton("确定", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        unistallDialog.dismiss();
+                                        Toast.makeText(AppScanner.this, "开始卸载", Toast.LENGTH_SHORT).show();
+                                        Uri uri = Uri.parse("package:" + target);
+                                    }
+                                })
+                                .setNegativeButton("取消", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        unistallDialog.dismiss();
+                                    }
+                                }) .show();
+
                         break;
                 }
-                // false : close the menu; true : not close the menu
                 return false;
             }
         });

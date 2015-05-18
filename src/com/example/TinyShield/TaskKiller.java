@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.widget.*;
+import com.me.drakeet.materialdialog.MaterialDialog;
 import com.romainpiel.titanic.library.TitanicTextView;
 import com.romainpiel.titanic.library.Typefaces;
 
@@ -43,6 +45,10 @@ public class TaskKiller extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.killer);
 
+//        Intent load = new Intent(TaskKiller.this, Loading.class);
+//        load.putExtra("delay", 10000);
+//        startActivity(load);
+
         textView = (TitanicTextView) findViewById(R.id.top);
         textView.setTypeface(Typefaces.get(this, "fonts/Satisfy-Regular.ttf"));
 
@@ -62,49 +68,33 @@ public class TaskKiller extends Activity {
                 final Map<String, Object> task = maplist.get(position);
                 final int clickpos = position;
 
-                AlertDialog.Builder dialog = new AlertDialog.Builder(TaskKiller.this);
-                dialog.setTitle(task.get("taskname").toString());
-                dialog.setMessage("Continue to kill this task?");
-                dialog.setCancelable(false);
-                dialog.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                final MaterialDialog dialog = new MaterialDialog(TaskKiller.this);
+                dialog.setTitle("进程管理").setMessage("确定要结束进程？\n" + task.get("taskname").toString());
+                dialog.setPositiveButton("确定", new View.OnClickListener() {
 
                     ActivityManager activityManager = (ActivityManager) TaskKiller.this
                             .getSystemService(Context.ACTIVITY_SERVICE);
 
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                      //  activityManager.killBackgroundProcesses(task.get("taskname").toString());
-                        if(!kill_lock){
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        if (!kill_lock) {
                             activityManager.killBackgroundProcesses(task.get("taskname").toString());
                             kill_position = clickpos;
                             Message msg = new Message();
                             msg.what = IF_KILL;
                             handler.sendMessage(msg);
+                        } else {
+                            Toast.makeText(TaskKiller.this, "Waiting for another task to be done", Toast.LENGTH_SHORT).show();
                         }
-                        else{
-                            Toast.makeText(TaskKiller.this,"Waiting for another task to be done",Toast.LENGTH_SHORT).show();
-                        }
-
-//                        List<Map<String, Object>> newmaplist = getData();
-//                        if (maplist.size() == newmaplist.size() + 1) {
-//
-//                            maplist.remove(clickpos);
-//                            simpleAdapter.notifyDataSetChanged();
-//                        } else {
-//                            Toast.makeText(TaskKiller.this, "System process, Killing failed!", Toast.LENGTH_SHORT).show();
-//
-//                        }
                     }
-                });
-
-
-                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                })
+                .setNegativeButton("取消", new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
+                    public void onClick(View v) {
+                        dialog.dismiss();
                     }
-                });
-                dialog.show();
+                }).show();
 
             }
         });
@@ -224,7 +214,6 @@ public class TaskKiller extends Activity {
             map.put("taskname", si.processName);
             map.put("pid",si.pid);
             map.put("memory",memoryInfo[0].getTotalPss());
-            //map.put("icon", icon);
 
             list.add(map);
 

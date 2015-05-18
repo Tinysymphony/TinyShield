@@ -165,4 +165,9 @@
     <color name="material_deep_teal_20">#ff80cbc4</color>
     <color name="material_deep_teal_50">#ff009688</color>
 
+    <color name="card_background">#ffffff</color>
+    <color name="card_shadow">#10000000</color>
+    <color name="lite_blue">#ff359ff2</color>
+    <color name="window_background">#00000000</color>
+
 </resources>

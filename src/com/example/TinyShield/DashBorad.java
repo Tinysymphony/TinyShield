@@ -9,6 +9,8 @@ import android.widget.Button;
 import com.romainpiel.titanic.library.TitanicTextView;
 import com.romainpiel.titanic.library.Typefaces;
 
+import java.util.logging.Handler;
+
 /**
  * Created by tiny on 5/17/15.
  */
@@ -52,6 +54,9 @@ public class DashBorad extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(DashBorad.this, ApkScanner.class);
                 startActivity(intent);
+
+
+
             }
         });
 

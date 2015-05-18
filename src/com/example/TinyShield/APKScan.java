@@ -10,13 +10,12 @@ package com.example.TinyShield;
 public class APKScan {
 
 
-    public static void getFiles(String path, ArrayList<String> apkPath, ArrayList<String> MD5List) {
+    public static File[] getFiles(String path, ArrayList<String> apkPath, ArrayList<String> MD5List) {
         // TODO Auto-generated method stub
 
         File file = new File(path);
         File[] files = file.listFiles();
         String MD5 = null;
-
 
         for (int j = 0; j < files.length; j++) {
             String name = files[j].getName();
@@ -39,6 +38,7 @@ public class APKScan {
                 }
             }
         }
+        return files;
     }
 
 }

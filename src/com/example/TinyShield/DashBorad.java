@@ -52,6 +52,16 @@ public class DashBorad extends Activity {
         apkScanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                    }
+//                }
+//
+//                ).start();
+
                 Intent intent = new Intent(DashBorad.this, ApkScanner.class);
                 startActivity(intent);
 

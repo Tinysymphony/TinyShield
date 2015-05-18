@@ -106,9 +106,7 @@ public class TaskKiller extends Activity {
 
                 switch(msg.what){
                     case UPDATE_MEM:
-//                        maplist.removeAll(maplist);
-//                        maplist.addAll(getData());
-//                        simpleAdapter.notifyDataSetChanged();
+
                         if(!lock) {
                             lock = true;
                             new Thread(new Runnable() {
@@ -118,10 +116,16 @@ public class TaskKiller extends Activity {
 
                                     int len = maplist.size();
                                     Map<String, Object> map, newmap;
-                                    for(int i = 0; i < len; i++){
-                                        map = maplist.get(i);
-                                        newmap = newmaplist.get(i);
-                                        map.put("memory",newmap.get("memory"));
+                                    if(len != newmaplist.size()){
+                                        maplist.removeAll(maplist);
+                                        maplist.addAll(newmaplist);
+                                    }
+                                    else{
+                                        for(int i = 0; i < len; i++){
+                                            map = maplist.get(i);
+                                            newmap = newmaplist.get(i);
+                                            map.put("memory",newmap.get("memory"));
+                                        }
                                     }
 
                                     Message msg = new Message();
@@ -221,9 +225,6 @@ public class TaskKiller extends Activity {
 
         return list;
     }
-
     // map to string
     // split and fetch data with explicit index.
-
-
 }

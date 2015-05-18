@@ -22,7 +22,6 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
-import com.cengalabs.flatui.views.FlatCheckBox;
 import com.cengalabs.flatui.views.FlatRadioButton;
 import com.cengalabs.flatui.views.FlatTextView;
 import com.romainpiel.titanic.library.TitanicTextView;

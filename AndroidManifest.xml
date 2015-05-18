@@ -19,5 +19,5 @@
         <activity android:name=".TaskKiller" />
     </application>
     <uses-permission android:name="android.permission.GET_PACKAGE_SIZE"/>
-
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
 </manifest>

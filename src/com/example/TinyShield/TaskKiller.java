@@ -23,9 +23,19 @@ import java.util.*;
  */
 public class TaskKiller extends Activity {
 
-    private final static int UPDATE_MEM = 1;
     private final static int REFRESH_TIME = 8000;
     private TitanicTextView textView;
+
+    final static int UPDATE_MEM = 1;
+    final static int UPDATE_COMPLETE = 2;
+    final static int IF_KILL = 3;
+    final static int KILL_FAILED = 4;
+
+    boolean lock = false;
+    boolean kill_lock = false;
+    int kill_position;
+
+    android.os.Handler handler = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,20 +73,31 @@ public class TaskKiller extends Activity {
 
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        activityManager.killBackgroundProcesses(task.get("taskname").toString());
-
-                        List<Map<String, Object>> newmaplist = getData();
-                        if(maplist.size() == newmaplist.size() + 1){
-
-                            maplist.remove(clickpos);
-                            simpleAdapter.notifyDataSetChanged();
+                      //  activityManager.killBackgroundProcesses(task.get("taskname").toString());
+                        if(!kill_lock){
+                            activityManager.killBackgroundProcesses(task.get("taskname").toString());
+                            kill_position = clickpos;
+                            Message msg = new Message();
+                            msg.what = IF_KILL;
+                            handler.sendMessage(msg);
                         }
                         else{
-                            Toast.makeText(TaskKiller.this,"System process, Killing failed!",Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(TaskKiller.this,"Waiting for another task to be done",Toast.LENGTH_SHORT).show();
                         }
+
+//                        List<Map<String, Object>> newmaplist = getData();
+//                        if (maplist.size() == newmaplist.size() + 1) {
+//
+//                            maplist.remove(clickpos);
+//                            simpleAdapter.notifyDataSetChanged();
+//                        } else {
+//                            Toast.makeText(TaskKiller.this, "System process, Killing failed!", Toast.LENGTH_SHORT).show();
+//
+//                        }
                     }
                 });
+
+
                 dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -89,35 +110,92 @@ public class TaskKiller extends Activity {
         });
 
 
-        final android.os.Handler handler = new android.os.Handler(){
+         handler = new android.os.Handler(){
 
             public void handleMessage(Message msg){
 
                 switch(msg.what){
-
                     case UPDATE_MEM:
-                        maplist.removeAll(maplist);
-                        maplist.addAll(getData());
-                        simpleAdapter.notifyDataSetChanged();
+//                        maplist.removeAll(maplist);
+//                        maplist.addAll(getData());
+//                        simpleAdapter.notifyDataSetChanged();
+                        if(!lock) {
+                            lock = true;
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    List<Map<String,Object>> newmaplist = getData();
+
+                                    int len = maplist.size();
+                                    Map<String, Object> map, newmap;
+                                    for(int i = 0; i < len; i++){
+                                        map = maplist.get(i);
+                                        newmap = newmaplist.get(i);
+                                        map.put("memory",newmap.get("memory"));
+                                    }
+
+                                    Message msg = new Message();
+                                    msg.what = UPDATE_COMPLETE;
+                                    handler.sendMessage(msg);
+                                }
+                            }).start();
+                        }
                         break;
+
+                    case UPDATE_COMPLETE:
+                        simpleAdapter.notifyDataSetChanged();
+                        lock = false;
+                        break;
+
+                    case IF_KILL:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                while(lock){}
+                                lock = true;
+                                List<Map<String, Object>> newmaplist = getData();
+
+                                if(maplist.size() == newmaplist.size() + 1){
+                                    while(kill_lock){}
+                                    kill_lock = true;
+                                    maplist.remove(kill_position);
+                                    kill_lock = false;
+                                    Message msg = new Message();
+                                    msg.what = UPDATE_COMPLETE;
+                                    handler.sendMessage(msg);
+                                }
+                                else{
+                                    Message msg = new Message();
+                                    msg.what = KILL_FAILED;
+                                    handler.sendMessage(msg);
+                                }
+                            }
+                        }).start();
+                        break;
+
+                    case KILL_FAILED:
+                        Toast.makeText(TaskKiller.this,"System process, Killing failed!",Toast.LENGTH_SHORT).show();
+                        lock = false;
+                        break;
+
                 }
 
             }
 
         };
 
-//        TimerTask ttask = new TimerTask() {
-//
-//            @Override
-//            public void run() {
-//                Message msg = new Message();
-//                msg.what = UPDATE_MEM;
-//                handler.sendMessage(msg);
-//            }
-//        };
-//        Timer timer = new Timer(true);
-//        timer.schedule(ttask,1000, REFRESH_TIME);
+        TimerTask ttask = new TimerTask() {
 
+            @Override
+            public void run() {
+                Message msg = new Message();
+                msg.what = UPDATE_MEM;
+                handler.sendMessage(msg);
+            }
+        };
+        Timer timer = new Timer(true);
+        timer.schedule(ttask,1000, REFRESH_TIME);
     }
 
 
@@ -137,20 +215,6 @@ public class TaskKiller extends Activity {
         while (appProcessList.hasNext()) {
             ActivityManager.RunningAppProcessInfo si =  appProcessList.next();
 
-//            ApplicationInfo appInfo = null;
-//            PackageManager pm = this.getPackageManager();
-//
-//            ImageView icon = null;
-//            try {
-//                appInfo = pm.getApplicationInfo(si.pkgList[0], PackageManager.GET_META_DATA);
-//            }catch (Exception e){
-//
-//                System.out.println("Can not load appInfo");
-//
-//            }
-
-           // icon.setImageDrawable(appInfo.loadIcon(pm));
-
             int[] pids = new int[1];
             pids[0] = si.pid;
 
@@ -169,7 +233,8 @@ public class TaskKiller extends Activity {
         return list;
     }
 
-
+    // map to string
+    // split and fetch data with explicit index.
 
 
 }

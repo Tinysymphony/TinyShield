@@ -69,8 +69,6 @@ public class DashBorad extends Activity {
                 Intent intent = new Intent(DashBorad.this, ApkScanner.class);
                 startActivity(intent);
 
-
-
             }
         });
 

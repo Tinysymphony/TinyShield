@@ -9,10 +9,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private Context mContext;
 
-    private final String CREATE_TABLE_PERMISSION =
-            "create table permission(id varchar(100) primary key ,"
+    private final static String CREATE_TABLE_APK =
+            "create table apk(id varchar(100) primary key ,"
                     + "md5 var(100)"
                     +")";
+
+    private final static String CREATE_PERMISSION_LIST =
+            "create table permission(name varchar(100) primary key,"
+                    + "num int"
+                    + ")";
+
     public DatabaseHelper(Context context, String name, int version) {
         super(context,name,null,version);
         mContext = context;
@@ -20,9 +26,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_PERMISSION);
+        db.execSQL(CREATE_TABLE_APK);
+        db.execSQL(CREATE_PERMISSION_LIST);
         initDatabase(db);
         Toast.makeText(mContext, "Database create success!", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -35,7 +43,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void initDatabase(SQLiteDatabase db){
         // Add data here
-
     }
 
 }

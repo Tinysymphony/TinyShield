@@ -17,13 +17,17 @@ public class AppInfo {
     private Drawable appIcon=null;
     private List<String>permissionList = new ArrayList<String>();
 
+    public boolean permissionChanged = false;
+    public int permissionCount = 0;
     public AppInfo(){
     }
 
     public void setPermissionList(String[] permissions){
         if(permissions != null)
-            for (String permission : permissions)
+            for (String permission : permissions) {
                 permissionList.add(permission);
+                permissionCount ++;
+            }
     }
 
     public void setAppName(String name){
@@ -89,6 +93,10 @@ public class AppInfo {
         //print all
         //for(String string : permissionList)
         //    stringBuilder.append(string+"\n");
+
+        if(permissionChanged)
+            stringBuilder.append("警告：权限提升\n");
+
         return stringBuilder.toString();
     }
 

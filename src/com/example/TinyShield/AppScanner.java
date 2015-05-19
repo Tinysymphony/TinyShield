@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,75 +44,18 @@ public class AppScanner extends Activity{
     private TitanicTextView textView;
     private ArrayList appList;
     private SwipeMenuListView listView;
+
+    SQLiteDatabase db ;
+
     PackageManager pm;
-
-    private void scanAll() {
-        appList = new ArrayList<AppInfo>();
-        pm=this.getPackageManager();
-        List<PackageInfo> packages= pm.getInstalledPackages(PackageManager.GET_PERMISSIONS);
-
-        for(int i=0;i<packages.size();i++){
-            PackageInfo packageInfo=packages.get(i);
-
-            //ignore system application
-            if((packageInfo.applicationInfo.flags& ApplicationInfo.FLAG_SYSTEM)!=0)
-                continue;
-
-            AppInfo tmpAppInfo= new AppInfo();
-            tmpAppInfo.setAppName(packageInfo.applicationInfo.loadLabel(pm).toString());
-            tmpAppInfo.setAppPackageName(packageInfo.packageName);
-            tmpAppInfo.setPermissionList(packageInfo.requestedPermissions);
-            tmpAppInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(pm));
-
-            appList.add(tmpAppInfo);
-
-        }
-        Log.d(ACT, "Finish scanning.");
-    }
-
-    private SwipeMenuCreator creator = new SwipeMenuCreator() {
-
-        @Override
-        public void create(SwipeMenu menu) {
-
-            //create "more" item
-            SwipeMenuItem moreItem = new SwipeMenuItem(
-                    getApplicationContext());
-            moreItem.setBackground(new ColorDrawable(Color.rgb(105, 176, 172))); //青磁
-            moreItem.setWidth(90);
-            moreItem.setTitleSize(18);
-            moreItem.setTitle("分析");
-            moreItem.setTitleColor(Color.WHITE);
-            menu.addMenuItem(moreItem);
-
-            // create "open" item
-            SwipeMenuItem openItem = new SwipeMenuItem(
-                    getApplicationContext());
-            openItem.setBackground(new ColorDrawable(Color.rgb(0, 170, 144))); //青绿
-            openItem.setWidth(90);
-            openItem.setTitle("打开");
-            openItem.setTitleColor(Color.WHITE);
-            openItem.setTitleSize(18);
-            menu.addMenuItem(openItem);
-
-            // create "delete" item
-            SwipeMenuItem deleteItem = new SwipeMenuItem(
-                    getApplicationContext());
-            deleteItem.setBackground(new ColorDrawable(Color.rgb(38, 135, 133))); //青碧
-            deleteItem.setWidth(90);
-            deleteItem.setTitleSize(18);
-            deleteItem.setTitle("卸载");
-            deleteItem.setTitleColor(Color.WHITE);
-            menu.addMenuItem(deleteItem);
-        }
-    };
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.app_list);
+
+        db = new DatabaseHelper(AppScanner.this, "apk", 1).getReadableDatabase();
 
         textView = (TitanicTextView) findViewById(R.id.top);
         textView.setTypeface(Typefaces.get(this, "fonts/Satisfy-Regular.ttf"));
@@ -167,61 +112,138 @@ public class AppScanner extends Activity{
             }
         });
 
+    }
+
+    private void scanAll() {
+        appList = new ArrayList<AppInfo>();
+        pm=this.getPackageManager();
+        List<PackageInfo> packages= pm.getInstalledPackages(PackageManager.GET_PERMISSIONS);
+
+        for(int i=0;i<packages.size();i++){
+            PackageInfo packageInfo=packages.get(i);
+
+            //ignore system application
+            if((packageInfo.applicationInfo.flags& ApplicationInfo.FLAG_SYSTEM)!=0)
+                continue;
+
+            AppInfo tmpAppInfo= new AppInfo();
+            tmpAppInfo.setAppName(packageInfo.applicationInfo.loadLabel(pm).toString());
+            tmpAppInfo.setAppPackageName(packageInfo.packageName);
+            tmpAppInfo.setPermissionList(packageInfo.requestedPermissions);
+            tmpAppInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(pm));
+
+            String count = String.valueOf(tmpAppInfo.permissionCount);
+            final String isInitialized = "select num from permission where name = ?";
+            Cursor cursor = db.rawQuery(isInitialized, new String[]{packageInfo.packageName});
+            if(cursor.moveToNext()){
+                int num = cursor.getInt(0);
+                if(num != Integer.parseInt(count))
+                    tmpAppInfo.permissionChanged = true;
+            }
+            else{
+                String insertPermission = "insert into permission(name," + "num) "
+                        + "values(?,?)";
+                db.execSQL(insertPermission, new String[]{packageInfo.packageName, count});
+            }
+            cursor.close();
+
+            appList.add(tmpAppInfo);
+
+        }
+        Log.d(ACT, "Finish scanning.");
+    }
+
+
+    public class InfoAdapter extends BaseAdapter {
+        private LayoutInflater mInflater;
+
+        public InfoAdapter(Context context){
+            this.mInflater=LayoutInflater.from(context);
         }
 
-        public class InfoAdapter extends BaseAdapter {
-            private LayoutInflater mInflater;
-
-            public InfoAdapter(Context context){
-                this.mInflater=LayoutInflater.from(context);
-            }
-
-            @Override
-            public int getCount(){
-                return appList.size();
-            }
-
-            @Override
-            public Object getItem(int arg0){
-                return null;
-            }
-
-            @Override
-            public long getItemId(int arg0){
-                return 0;
-            }
-
-            @Override
-            public View getView(int position,View convertView, ViewGroup parent){
-                AppInfo appInfo =(AppInfo) appList.get(position);
-                ViewHolder itemHolder;
-                if(convertView==null){
-                    convertView = mInflater.inflate(R.layout.app_list_item,null);
-                    itemHolder = new ViewHolder();
-                    itemHolder.icon=(ImageView)convertView.findViewById(R.id.app);
-                    itemHolder.name=(FlatTextView)convertView.findViewById(R.id.appName);
-                    itemHolder.pname=(FlatTextView)convertView.findViewById(R.id.packageName);
-                    convertView.setTag(itemHolder);
-                } else{
-                    itemHolder=(ViewHolder)convertView.getTag();
-                }
-
-                if(appInfo.isSMS())
-                    ((FlatRadioButton)convertView.findViewById(R.id.sms)).setChecked(true);
-
-                if(appInfo.isFile())
-                    ((FlatRadioButton)convertView.findViewById(R.id.file)).setChecked(true);
-
-                if(appInfo.isContact())
-                    ((FlatRadioButton)convertView.findViewById(R.id.contact)).setChecked(true);
-
-
-                itemHolder.name.setText(appInfo.getAppName());
-                itemHolder.pname.setText(appInfo.getAppPackageName());
-                itemHolder.icon.setImageDrawable(appInfo.getAppIcon());
-                return convertView;
-            }
+        @Override
+        public int getCount(){
+            return appList.size();
         }
+
+        @Override
+        public Object getItem(int arg0){
+            return null;
+        }
+
+        @Override
+        public long getItemId(int arg0){
+            return 0;
+        }
+
+        @Override
+        public View getView(int position,View convertView, ViewGroup parent){
+            AppInfo appInfo =(AppInfo) appList.get(position);
+            ViewHolder itemHolder;
+            if(convertView==null){
+                convertView = mInflater.inflate(R.layout.app_list_item,null);
+                itemHolder = new ViewHolder();
+                itemHolder.icon=(ImageView)convertView.findViewById(R.id.app);
+                itemHolder.name=(FlatTextView)convertView.findViewById(R.id.appName);
+                itemHolder.pname=(FlatTextView)convertView.findViewById(R.id.packageName);
+                convertView.setTag(itemHolder);
+            } else{
+                itemHolder=(ViewHolder)convertView.getTag();
+            }
+
+            if(appInfo.isSMS())
+                ((FlatRadioButton)convertView.findViewById(R.id.sms)).setChecked(true);
+
+            if(appInfo.isFile())
+                ((FlatRadioButton)convertView.findViewById(R.id.file)).setChecked(true);
+
+            if(appInfo.isContact())
+                ((FlatRadioButton)convertView.findViewById(R.id.contact)).setChecked(true);
+
+
+            itemHolder.name.setText(appInfo.getAppName());
+            itemHolder.pname.setText(appInfo.getAppPackageName());
+            itemHolder.icon.setImageDrawable(appInfo.getAppIcon());
+            return convertView;
+        }
+    }
+
+    private SwipeMenuCreator creator = new SwipeMenuCreator() {
+
+        @Override
+        public void create(SwipeMenu menu) {
+
+            //create "more" item
+            SwipeMenuItem moreItem = new SwipeMenuItem(
+                    getApplicationContext());
+            moreItem.setBackground(new ColorDrawable(Color.rgb(105, 176, 172))); //青磁
+            moreItem.setWidth(90);
+            moreItem.setTitleSize(18);
+            moreItem.setTitle("分析");
+            moreItem.setTitleColor(Color.WHITE);
+            menu.addMenuItem(moreItem);
+
+            // create "open" item
+            SwipeMenuItem openItem = new SwipeMenuItem(
+                    getApplicationContext());
+            openItem.setBackground(new ColorDrawable(Color.rgb(0, 170, 144))); //青绿
+            openItem.setWidth(90);
+            openItem.setTitle("打开");
+            openItem.setTitleColor(Color.WHITE);
+            openItem.setTitleSize(18);
+            menu.addMenuItem(openItem);
+
+            // create "delete" item
+            SwipeMenuItem deleteItem = new SwipeMenuItem(
+                    getApplicationContext());
+            deleteItem.setBackground(new ColorDrawable(Color.rgb(38, 135, 133))); //青碧
+            deleteItem.setWidth(90);
+            deleteItem.setTitleSize(18);
+            deleteItem.setTitle("卸载");
+            deleteItem.setTitleColor(Color.WHITE);
+            menu.addMenuItem(deleteItem);
+        }
+    };
 
     private class ViewHolder{
         FlatTextView name=null;

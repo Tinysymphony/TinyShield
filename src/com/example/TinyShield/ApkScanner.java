@@ -73,7 +73,7 @@ public class ApkScanner extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.apk_scan);
 
-        dbhelper = new DatabaseHelper(ApkScanner.this, "Permission", 1);
+        dbhelper = new DatabaseHelper(ApkScanner.this, "apk", 1);
         db = dbhelper.getReadableDatabase();
 
 //        Intent load = new Intent(ApkScanner.this, Loading.class);
@@ -291,8 +291,8 @@ public class ApkScanner extends Activity {
 
             itemName = tmpAppInfo.getAppName() + tmpAppInfo.getVersion();
 
-            final String FindMD5 = "select md5 from permission where id = ?";
-            Cursor cursor = db.rawQuery(FindMD5, new String[]{itemName});
+            final String findMD5 = "select md5 from permission where id = ?";
+            Cursor cursor = db.rawQuery(findMD5, new String[]{itemName});
 
             if(cursor.moveToNext()){
                 String md5value = cursor.getString(0);

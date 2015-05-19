@@ -2,10 +2,8 @@ package com.example.TinyShield;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 import com.romainpiel.titanic.library.Titanic;
@@ -37,7 +35,7 @@ public class Loading extends Activity {
                 Loading.this.finish();
                 Toast.makeText(getApplicationContext(), "扫描成功", Toast.LENGTH_SHORT).show();
             }
-        },Integer.valueOf(getIntent().getIntExtra("delay", 5000)));
+        },Integer.valueOf(getIntent().getIntExtra("delay", 50000)));
 
     }
 

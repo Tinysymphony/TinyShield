@@ -9,6 +9,8 @@ import android.widget.Button;
 import com.romainpiel.titanic.library.TitanicTextView;
 import com.romainpiel.titanic.library.Typefaces;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Handler;
 
 /**
@@ -56,11 +58,13 @@ public class DashBorad extends Activity {
 //                new Thread(new Runnable() {
 //                    @Override
 //                    public void run() {
+//                        List<AppInfo> apk_list = new ArrayList<AppInfo>();
+//                        List<String >apk_path = new ArrayList<String>();
+//                        List<String>md5_list = new ArrayList<String>();
+//                        new ApkScanner().getScanData(apk_list, md5_list, apk_path);
 //
 //                    }
-//                }
-//
-//                ).start();
+//                }).start();
 
                 Intent intent = new Intent(DashBorad.this, ApkScanner.class);
                 startActivity(intent);

@@ -1,16 +1,16 @@
 package com.example.TinyShield;
 
 
-        import java.io.File;
-        import java.util.ArrayList;
+import java.io.File;
+import java.util.List;
 
 /**
  * Created by LK on 2015/5/15.
  */
-public class APKScan {
+public class ApkScan {
 
 
-    public static File[] getFiles(String path, ArrayList<String> apkPath, ArrayList<String> MD5List) {
+    public static void getFiles(String path, List<String> apkPath, List<String> MD5List) {
         // TODO Auto-generated method stub
 
         File file = new File(path);
@@ -38,7 +38,6 @@ public class APKScan {
                 }
             }
         }
-        return files;
     }
 
 }

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -24,7 +26,6 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.me.drakeet.materialdialog.MaterialDialog;
 import com.romainpiel.titanic.library.TitanicTextView;
 import com.romainpiel.titanic.library.Typefaces;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +45,13 @@ public class ApkScanner extends Activity {
 
     private ArrayList apkList;
 
+    private ArrayList<Boolean> validList;
+
     private TitanicTextView textView;
     SwipeMenuListView listView;
+
+    DatabaseHelper dbhelper ;
+    SQLiteDatabase db ;
 
     private void packGet(List<PackageInfo> packages, ArrayList<String> apkPath) {
 
@@ -61,47 +67,14 @@ public class ApkScanner extends Activity {
         }
     }
 
-    private void scanAll() {
-        PackageManager pm = this.getPackageManager();
-        apkList = new ArrayList<AppInfo>();
-
-        List<PackageInfo> packages = new ArrayList<PackageInfo>();
-
-        APKScan.getFiles(SDPath, apkPath, MD5List);
-
-        packGet(packages, apkPath);
-
-        for (int i = 0; i < packages.size(); i++) {
-            PackageInfo packageInfo = packages.get(i);
-
-            //ignore system application
-            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0)
-                continue;
-
-            Log.d(SCAN, packageInfo.packageName);
-
-            AppInfo tmpAppInfo = new AppInfo();
-
-            tmpAppInfo.setAppName(packageInfo.applicationInfo.loadLabel(pm).toString());
-            tmpAppInfo.setAppPackageName(packageInfo.packageName);
-            tmpAppInfo.setVersion(packageInfo.versionName + "/" +packageInfo.versionCode);
-
-            ApplicationInfo appInfo = packageInfo.applicationInfo;
-            appInfo.sourceDir = apkPath.get(i);
-            appInfo.publicSourceDir = apkPath.get(i);
-
-            tmpAppInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(pm));
-
-            apkList.add(tmpAppInfo);
-
-        }
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.apk_scan);
+
+        dbhelper = new DatabaseHelper(ApkScanner.this, "Permission", 1);
+        db = dbhelper.getReadableDatabase();
 
 //        Intent load = new Intent(ApkScanner.this, Loading.class);
 //        load.putExtra("delay", 20000);
@@ -129,10 +102,19 @@ public class ApkScanner extends Activity {
                     String md5 = MD5List.get(position);
 
                     final String path = apkPath.get(position);
+                    String result = "检测失败";
+
+                    if(validList.get(position)){
+                        result = "数据包完好，可以安装";
+                    }
+                    else{
+                        result = "数据包已被篡改，建议不要安装";
+                    }
+
                     String message = "Apk安装包md5校验结果为：\n"
                             + md5 + "\n"
                             + "比对结果：\n"
-                            + md5Compare(appInfo.getAppName(), appInfo.getVersion(), md5);
+                            + result;
 
                     final MaterialDialog installDialog = new MaterialDialog(ApkScanner.this);
                     installDialog.setTitle("安装包校验").setMessage(message)
@@ -159,7 +141,6 @@ public class ApkScanner extends Activity {
                 }
             }
         });
-
 
         listView.setMenuCreator(creator);
 
@@ -272,6 +253,70 @@ public class ApkScanner extends Activity {
 
     }
 
+    private void scanAll() {
+        PackageManager pm = this.getPackageManager();
+        apkList = new ArrayList<AppInfo>();
+        validList = new ArrayList<Boolean>();
+
+        String itemName;
+
+        List<PackageInfo> packages = new ArrayList<PackageInfo>();
+
+        ApkScan.getFiles(SDPath, apkPath, MD5List);
+
+        packGet(packages, apkPath);
+
+        for (int i = 0; i < packages.size(); i++) {
+            PackageInfo packageInfo = packages.get(i);
+
+            //ignore system application
+            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0)
+                continue;
+
+            Log.d(SCAN, packageInfo.packageName);
+
+            AppInfo tmpAppInfo = new AppInfo();
+
+            tmpAppInfo.setAppName(packageInfo.applicationInfo.loadLabel(pm).toString());
+            tmpAppInfo.setAppPackageName(packageInfo.packageName);
+            tmpAppInfo.setVersion(packageInfo.versionName + "/" +packageInfo.versionCode);
+
+            ApplicationInfo appInfo = packageInfo.applicationInfo;
+            appInfo.sourceDir = apkPath.get(i);
+            appInfo.publicSourceDir = apkPath.get(i);
+
+            tmpAppInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(pm));
+
+            apkList.add(tmpAppInfo);
+
+            itemName = tmpAppInfo.getAppName() + tmpAppInfo.getVersion();
+
+            final String FindMD5 = "select md5 from permission where id = ?";
+            Cursor cursor = db.rawQuery(FindMD5, new String[]{itemName});
+
+            if(cursor.moveToNext()){
+                String md5value = cursor.getString(0);
+                if(MD5List.get(i).equals(md5value)){
+                    validList.add(new Boolean(true));
+                }
+                else{
+                    validList.add(new Boolean(false));
+                    Log.v(itemName,md5value);
+                    Log.v(itemName, "false result");
+                }
+            }
+            else{
+                final String insertion = "insert into permission(id,"
+                        + "md5) "
+                        + "values(?,?)";
+                db.execSQL(insertion, new Object[]{itemName, MD5List.get(i)});
+                validList.add(true);
+                Log.v(itemName,MD5List.get(i));
+            }
+            cursor.close();
+
+        }
+    }
 
     private String getSDPath() {
         File sdDir = null;

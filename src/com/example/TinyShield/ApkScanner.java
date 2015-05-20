@@ -105,10 +105,10 @@ public class ApkScanner extends Activity {
                     String result = "检测失败";
 
                     if(validList.get(position)){
-                        result = "数据包完好，可以安装";
+                        result = "安装包完好，非重打包，可以安装";
                     }
                     else{
-                        result = "数据包已被篡改，建议不要安装";
+                        result = "安装包有改动，可能为重打包，不建议安装";
                     }
 
                     String message = "Apk安装包md5校验结果为：\n"
@@ -291,7 +291,7 @@ public class ApkScanner extends Activity {
 
             itemName = tmpAppInfo.getAppName() + tmpAppInfo.getVersion();
 
-            final String findMD5 = "select md5 from permission where id = ?";
+            final String findMD5 = "select md5 from apk where id = ?";
             Cursor cursor = db.rawQuery(findMD5, new String[]{itemName});
 
             if(cursor.moveToNext()){
@@ -306,7 +306,7 @@ public class ApkScanner extends Activity {
                 }
             }
             else{
-                final String insertion = "insert into permission(id,"
+                final String insertion = "insert into apk(id,"
                         + "md5) "
                         + "values(?,?)";
                 db.execSQL(insertion, new Object[]{itemName, MD5List.get(i)});

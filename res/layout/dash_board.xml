@@ -1,71 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:flatui="http://schemas.android.com/apk/res/com.example.TinyShield"
-              android:orientation="vertical"
+<android.support.v4.widget.DrawerLayout
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/main"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:background="#fffbfdff"
+              android:background="@color/orange_primary"
         >
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:background="#0e8b9e"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
-        <com.romainpiel.titanic.library.TitanicTextView
-                android:layout_width="wrap_content"
+    <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:flatui="http://schemas.android.com/apk/res/com.example.TinyShield"
+            android:orientation="vertical"
+            android:background="@color/snow_primary"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+        <com.cengalabs.flatui.views.FlatButton
+                android:layout_width="150dp"
+                android:layout_height="120dp"
+                android:text="应用权限分析"
+                android:id="@+id/turnToApp" android:layout_gravity="center_horizontal"
+                flatui:fl_touchEffect="fl_ripple"
+                flatui:fl_blockButtonEffectHeight="2dp"
+                flatui:fl_theme="@array/sand"
+                android:layout_marginBottom="19dp" android:layout_above="@+id/turnToApk"
+                android:layout_alignLeft="@+id/turnToApk"/>
+
+        <com.cengalabs.flatui.views.FlatButton
+                android:layout_width="150dp"
+                android:layout_height="120dp"
+                android:text="流量检测"
+                android:id="@+id/turnToNetwork" android:layout_gravity="center_horizontal"
+                flatui:fl_touchEffect="fl_ripple"
+                flatui:fl_blockButtonEffectHeight="2dp"
+                flatui:fl_theme="@array/orange"
+                android:layout_centerVertical="true" android:layout_alignParentRight="true"
+                android:layout_marginRight="22dp"/>
+
+        <com.cengalabs.flatui.views.FlatButton
+                android:layout_width="150dp"
+                android:layout_height="120dp"
+                android:text="进程管理"
+                android:id="@+id/turnToKiller" android:layout_gravity="center_horizontal"
+                flatui:fl_touchEffect="fl_ripple"
+                flatui:fl_blockButtonEffectHeight="2dp"
+                flatui:fl_theme="@array/sky"
+                android:layout_alignTop="@+id/turnToApp" android:layout_toRightOf="@+id/turnToApk"/>
+
+        <com.cengalabs.flatui.views.FlatButton
+                android:layout_width="150dp"
+                android:layout_height="120dp"
+                android:text="安装包管理"
+                android:id="@+id/turnToApk" android:layout_gravity="center_horizontal"
+                flatui:fl_touchEffect="fl_ripple"
+                flatui:fl_blockButtonEffectHeight="2dp"
+                flatui:fl_theme="@array/grass"
+                android:layout_alignTop="@+id/turnToNetwork" android:layout_toLeftOf="@+id/turnToNetwork"
+                android:layout_marginRight="26dp"/>
+
+        <com.cengalabs.flatui.views.FlatButton
+                android:layout_width="320dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:id="@+id/top"
-                android:text="@string/loading"
-                android:textColor="#FFFFFF"
-                android:textSize="55sp"
-                android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
+                android:text="退出TinySheild"
+                android:id="@+id/exit" android:layout_gravity="center_horizontal"
+                flatui:fl_touchEffect="fl_ripple"
+                flatui:fl_blockButtonEffectHeight="2dp"
+                flatui:fl_theme="@array/grape"
+                android:layout_below="@+id/log" android:layout_alignLeft="@+id/log" android:layout_marginTop="22dp"/>
+
+        <com.cengalabs.flatui.views.FlatButton
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:text="查看内部日志"
+                android:id="@+id/log" android:layout_gravity="center_horizontal"
+                flatui:fl_touchEffect="fl_ripple"
+                flatui:fl_blockButtonEffectHeight="2dp"
+                flatui:fl_theme="@array/candy"
+                android:layout_below="@+id/turnToNetwork" android:layout_alignLeft="@+id/turnToApk"
+                android:layout_marginTop="38dp"/>
+
 
     </RelativeLayout>
 
-    <com.cengalabs.flatui.views.FlatButton
-            android:layout_width="150dp"
-            android:layout_height="120dp"
-            android:text="应用权限分析"
-            android:id="@+id/turnToApp" android:layout_gravity="center_horizontal"
-            flatui:fl_touchEffect="fl_ripple"
-            flatui:fl_blockButtonEffectHeight="2dp"
-            flatui:fl_theme="@array/sand"
-            android:layout_marginLeft="22dp" android:layout_alignTop="@+id/turnToNetwork"
-            android:layout_alignParentLeft="true"/>
+    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+                    <!--android:background="#0e8b9e"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content">-->
 
-    <com.cengalabs.flatui.views.FlatButton
-            android:layout_width="150dp"
-            android:layout_height="120dp"
-            android:text="流量检测"
-            android:id="@+id/turnToNetwork" android:layout_gravity="center_horizontal"
-            flatui:fl_touchEffect="fl_ripple"
-            flatui:fl_blockButtonEffectHeight="3dp"
-            flatui:fl_theme="@array/orange"
-            android:layout_centerVertical="true" android:layout_alignParentRight="true"
-            android:layout_marginRight="22dp"/>
+        <!--<com.romainpiel.titanic.library.TitanicTextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center"-->
+                <!--android:id="@+id/top"-->
+                <!--android:text="@string/loading"-->
+                <!--android:textColor="#FFFFFF"-->
+                <!--android:textSize="55sp"-->
+                <!--android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>-->
 
-    <com.cengalabs.flatui.views.FlatButton
-            android:layout_width="150dp"
-            android:layout_height="120dp"
-            android:text="进程管理"
-            android:id="@+id/turnToKiller" android:layout_gravity="center_horizontal"
-            flatui:fl_touchEffect="fl_ripple"
-            flatui:fl_blockButtonEffectHeight="3dp"
-            flatui:fl_theme="@array/sky"
-            android:layout_below="@+id/turnToApp" android:layout_alignLeft="@+id/turnToApp"
-            android:layout_marginTop="12dp"/>
-
-    <com.cengalabs.flatui.views.FlatButton
-            android:layout_width="150dp"
-            android:layout_height="120dp"
-            android:text="安装包管理"
-            android:id="@+id/turnToApk" android:layout_gravity="center_horizontal"
-            flatui:fl_touchEffect="fl_ripple"
-            flatui:fl_blockButtonEffectHeight="3dp"
-            flatui:fl_theme="@array/grass"
-            android:layout_alignTop="@+id/turnToKiller" android:layout_alignLeft="@+id/turnToNetwork"/>
+    <!--</RelativeLayout>-->
 
 
-</RelativeLayout>
+
+
+    <!-- The navigation drawer -->
+    <ListView
+            android:id="@+id/menu"
+            android:layout_width="@dimen/navdrawer_width"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/sky_primary"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
+            android:drawSelectorOnTop="false">
+    </ListView>
+
+
+</android.support.v4.widget.DrawerLayout>
 

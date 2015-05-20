@@ -170,4 +170,8 @@
     <color name="lite_blue">#ff359ff2</color>
     <color name="window_background">#00000000</color>
 
+    <color name="ldrawer_color">#FFFFFF</color>
+
+    <color name="actionbar_color">#bf360c</color>
+    <color name="drawer_arrow_second_color">#303f9f</color>
 </resources>

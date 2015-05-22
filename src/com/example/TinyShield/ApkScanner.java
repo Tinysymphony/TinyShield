@@ -182,6 +182,7 @@ public class ApkScanner extends Activity {
                 }
             }
         };
+
     }
 
     private SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -306,12 +307,12 @@ public class ApkScanner extends Activity {
 
             tmpAppInfo.setAppName(packageInfo.applicationInfo.loadLabel(pm).toString());
             tmpAppInfo.setAppPackageName(packageInfo.packageName);
-            tmpAppInfo.setVersion(packageInfo.versionName + "/" +packageInfo.versionCode);
-            tmpAppInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(pm));
+            tmpAppInfo.setVersion(packageInfo.versionName + "/" + packageInfo.versionCode);
 
             ApplicationInfo appInfo = packageInfo.applicationInfo;
             appInfo.sourceDir = apkPath.get(i);
             appInfo.publicSourceDir = apkPath.get(i);
+            tmpAppInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(pm));
 
             apkList.add(tmpAppInfo);
 

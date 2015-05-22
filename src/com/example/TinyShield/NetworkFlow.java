@@ -148,9 +148,9 @@ public class NetworkFlow extends Activity {
     //using different color according to data
     private int getFocus(long data){
         if(data != 0)
-            if(data > 100000)
+            if(data > 10000000)
                 return getResources().getColor(R.color.blood_dark);
-            else if(data > 20000)
+            else if(data > 8000000)
                 return getResources().getColor(R.color.orange_dark);
             else
                 return getResources().getColor(R.color.sand_dark);

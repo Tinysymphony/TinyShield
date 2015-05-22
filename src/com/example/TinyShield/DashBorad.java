@@ -161,6 +161,13 @@ public class DashBorad extends Activity {
         });
 
         logButton = (Button)findViewById(R.id.log);
+        logButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(DashBorad.this, "Function maintaince.", Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
         exitButton = (Button) findViewById(R.id.exit);
         exitButton.setOnClickListener(new View.OnClickListener() {
@@ -212,6 +219,6 @@ public class DashBorad extends Activity {
             "4.Network flow and process manager are auxiliary tools to protect your phone.\n" +
             "5.The log service might not be as perfect as designed.";
     private final static String DOC ="For docs please turn to TinySheild github page.";
-    private final static String ABOUTUS ="・王艺\nZJU CS 3120101996\n" + "・胡亮泽\n ZJU CS 3120102116";
+    private final static String ABOUTUS ="・王艺\nZJU CS 3120101996\n" + "・胡亮泽\nZJU CS 3120102116";
     private final static String WYTINY ="Blog:\nwww.wytiny.me";
 }

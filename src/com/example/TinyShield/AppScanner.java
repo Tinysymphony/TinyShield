@@ -1,8 +1,6 @@
 package com.example.TinyShield;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -45,6 +43,9 @@ public class AppScanner extends Activity{
     private ArrayList appList;
     private SwipeMenuListView listView;
 
+    private StringBuilder smsMoney;
+    private StringBuilder privacy;
+
     SQLiteDatabase db ;
 
     PackageManager pm;
@@ -59,6 +60,9 @@ public class AppScanner extends Activity{
 
         textView = (TitanicTextView) findViewById(R.id.top);
         textView.setTypeface(Typefaces.get(this, "fonts/Satisfy-Regular.ttf"));
+
+        smsMoney = new StringBuilder().append("以下应用可能会自动吸费：\n");
+        privacy = new StringBuilder().append("以下应用可能会窃取隐私：\n");
 
         scanAll();
 
@@ -83,14 +87,14 @@ public class AppScanner extends Activity{
                         break;
                     case 1:
                         Intent intent = new Intent();
-                        intent = pm.getLaunchIntentForPackage(((AppInfo)appList.get(position)).getAppPackageName());
+                        intent = pm.getLaunchIntentForPackage(((AppInfo) appList.get(position)).getAppPackageName());
                         startActivity(intent);
                         break;
                     case 2:
                         AppInfo tmpApp = (AppInfo) appList.get(position);
                         final MaterialDialog unistallDialog = new MaterialDialog(AppScanner.this);
                         final String target = tmpApp.getAppName();
-                        unistallDialog.setTitle("卸载应用").setMessage("确定要卸载"+target+"?")
+                        unistallDialog.setTitle("卸载应用").setMessage("确定要卸载" + target + "?")
                                 .setPositiveButton("确定", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -104,13 +108,16 @@ public class AppScanner extends Activity{
                                     public void onClick(View v) {
                                         unistallDialog.dismiss();
                                     }
-                                }) .show();
+                                }).show();
 
                         break;
                 }
                 return false;
             }
         });
+
+        MaterialDialog dialog = new MaterialDialog(AppScanner.this);
+        dialog.setTitle("高风险应用警告").setMessage(smsMoney.toString() + "\n" + privacy.toString()).show();
 
     }
 
@@ -148,6 +155,12 @@ public class AppScanner extends Activity{
             cursor.close();
 
             appList.add(tmpAppInfo);
+
+            if(tmpAppInfo.isSMS())
+                smsMoney.append(packageInfo.applicationInfo.loadLabel(pm).toString() + "\n");
+
+            if(tmpAppInfo.isContact())
+                privacy.append(packageInfo.applicationInfo.loadLabel(pm).toString() + "\n");
 
         }
         Log.d(ACT, "Finish scanning.");
@@ -192,14 +205,14 @@ public class AppScanner extends Activity{
             }
 
             if(appInfo.isSMS())
-                ((FlatRadioButton)convertView.findViewById(R.id.sms)).setChecked(true);
+                ((FlatRadioButton) convertView.findViewById(R.id.sms)).setChecked(true);
+                smsMoney.append(appInfo.getAppName() +"\n");
 
             if(appInfo.isFile())
                 ((FlatRadioButton)convertView.findViewById(R.id.file)).setChecked(true);
 
             if(appInfo.isContact())
-                ((FlatRadioButton)convertView.findViewById(R.id.contact)).setChecked(true);
-
+                ((FlatRadioButton) convertView.findViewById(R.id.contact)).setChecked(true);
 
             itemHolder.name.setText(appInfo.getAppName());
             itemHolder.pname.setText(appInfo.getAppPackageName());

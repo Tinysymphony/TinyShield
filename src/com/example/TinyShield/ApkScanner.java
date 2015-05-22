@@ -13,6 +13,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +40,10 @@ public class ApkScanner extends Activity {
     static final String SCAN = "APK Scan";
     final static String MD5_SUCCESS = "校验成功--非重打包";
     final static String MD5_FAIL = "校验失败--疑似重打包";
+    private static final int REFRESH = 1;
     private String SDPath = null;
+
+    android.os.Handler handler = null;
 
     ArrayList<String> apkPath = new ArrayList<String>();
     ArrayList<String> MD5List = new ArrayList<String>();
@@ -76,10 +81,6 @@ public class ApkScanner extends Activity {
         dbhelper = new DatabaseHelper(ApkScanner.this, "apk", 1);
         db = dbhelper.getReadableDatabase();
 
-//        Intent load = new Intent(ApkScanner.this, Loading.class);
-//        load.putExtra("delay", 20000);
-//        startActivity(load);
-
         SDPath = getSDPath();
 
         textView = (TitanicTextView) findViewById(R.id.top);
@@ -88,7 +89,10 @@ public class ApkScanner extends Activity {
         listView = (SwipeMenuListView) findViewById(R.id.apk_list);
 
         scanAll();
-        listView.setAdapter(new ApkAdapter(this));
+
+        final ApkAdapter apkAdapter = new ApkAdapter(this);
+
+        listView.setAdapter(apkAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -102,12 +106,11 @@ public class ApkScanner extends Activity {
                     String md5 = MD5List.get(position);
 
                     final String path = apkPath.get(position);
-                    String result = "检测失败";
+                    String result;
 
-                    if(validList.get(position)){
+                    if (validList.get(position)) {
                         result = "安装包完好，非重打包，可以安装";
-                    }
-                    else{
+                    } else {
                         result = "安装包有改动，可能为重打包，不建议安装";
                     }
 
@@ -149,12 +152,13 @@ public class ApkScanner extends Activity {
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_DELETE);
-                        AppInfo appInfo = (AppInfo) apkList.get(position);
-                        String packageName = appInfo.getAppPackageName();
-                        intent.setData(Uri.parse("package:" + packageName));
-                        startActivity(intent);
+                        Log.e("AAAAAAAAAAAAA",String.valueOf(validList.size())+"..." +String.valueOf(apkPath.size()));
+                        File file = new File(apkPath.get(position));
+                        file.delete();
+                        Message msg = new Message();
+                        msg.what = REFRESH;
+                        msg.arg1 = position;
+                        handler.sendMessage(msg);
                         break;
                     case 1:
                         Toast.makeText(ApkScanner.this, "已经提交", Toast.LENGTH_SHORT).show();
@@ -163,6 +167,25 @@ public class ApkScanner extends Activity {
                 return false;
             }
         });
+
+        handler = new Handler(){
+            public void handleMessage(Message msg){
+                switch (msg.what){
+                    case REFRESH:
+                        int position = msg.arg1;
+                        apkPath.remove(position);
+                        MD5List.remove(position);
+                        apkList.remove(position);
+                        validList.remove(position);
+                        apkAdapter.notifyDataSetChanged();
+                        Log.e("BBBBB", String.valueOf(validList.size()) + "..." + String.valueOf(apkPath.size()));
+
+                        break;
+                    default:break;
+                }
+            }
+        };
+
     }
 
     private SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -266,6 +289,14 @@ public class ApkScanner extends Activity {
 
         packGet(packages, apkPath);
 
+        int itemCount = 0;
+        final String testEmpty = "select count (*) from apk";
+        Cursor cursor = db.rawQuery(testEmpty, null);
+        if(cursor.moveToNext()){
+            itemCount = cursor.getInt(0);
+        }
+        cursor.close();
+
         for (int i = 0; i < packages.size(); i++) {
             PackageInfo packageInfo = packages.get(i);
 
@@ -280,19 +311,18 @@ public class ApkScanner extends Activity {
             tmpAppInfo.setAppName(packageInfo.applicationInfo.loadLabel(pm).toString());
             tmpAppInfo.setAppPackageName(packageInfo.packageName);
             tmpAppInfo.setVersion(packageInfo.versionName + "/" +packageInfo.versionCode);
+            tmpAppInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(pm));
 
             ApplicationInfo appInfo = packageInfo.applicationInfo;
             appInfo.sourceDir = apkPath.get(i);
             appInfo.publicSourceDir = apkPath.get(i);
-
-            tmpAppInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(pm));
 
             apkList.add(tmpAppInfo);
 
             itemName = tmpAppInfo.getAppName() + tmpAppInfo.getVersion();
 
             final String findMD5 = "select md5 from apk where id = ?";
-            Cursor cursor = db.rawQuery(findMD5, new String[]{itemName});
+            cursor = db.rawQuery(findMD5, new String[]{itemName});
 
             if(cursor.moveToNext()){
                 String md5value = cursor.getString(0);
@@ -305,7 +335,7 @@ public class ApkScanner extends Activity {
                     Log.v(itemName, "false result");
                 }
             }
-            else{
+            else if(itemCount == 0){
                 final String insertion = "insert into apk(id,"
                         + "md5) "
                         + "values(?,?)";
@@ -313,8 +343,11 @@ public class ApkScanner extends Activity {
                 validList.add(true);
                 Log.v(itemName,MD5List.get(i));
             }
-            cursor.close();
+            else{
+                validList.add(false);
+            }
 
+            cursor.close();
         }
     }
 

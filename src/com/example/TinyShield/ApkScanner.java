@@ -152,7 +152,6 @@ public class ApkScanner extends Activity {
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        Log.e("AAAAAAAAAAAAA",String.valueOf(validList.size())+"..." +String.valueOf(apkPath.size()));
                         File file = new File(apkPath.get(position));
                         file.delete();
                         Message msg = new Message();
@@ -178,14 +177,11 @@ public class ApkScanner extends Activity {
                         apkList.remove(position);
                         validList.remove(position);
                         apkAdapter.notifyDataSetChanged();
-                        Log.e("BBBBB", String.valueOf(validList.size()) + "..." + String.valueOf(apkPath.size()));
-
                         break;
                     default:break;
                 }
             }
         };
-
     }
 
     private SwipeMenuCreator creator = new SwipeMenuCreator() {
